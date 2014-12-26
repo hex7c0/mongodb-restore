@@ -1,0 +1,46 @@
+{
+  "version": "0.0.0",
+  "name": "mongodb-restore",
+  "description": "restore for mongodb-backup",
+  "keywords": [
+    "mongodb",
+    "restore"
+  ],
+  "preferGlobal": false,
+  "homepage": "http://supergiovane.tk/#/mongodb-restore",
+  "author": {
+    "name": "hex7c0",
+    "email": "hex7c0@gmail.com",
+    "url": "http://hex7c0.tk/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hex7c0/mongodb-restore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hex7c0/mongodb-restore/issues",
+    "email": "hex7c0@gmail.com"
+  },
+  "main": "index.min.js",
+  "dependencies": {
+    "mongodb": "1.4.26",
+    "logger-request": "3.2.5",
+    "tar": "1.0.3"
+  },
+  "devDependencies": {
+    "mocha": "~2.1",
+    "mongodb-backup": "~0.1",
+    "grunt-contrib-clean": "~0.6",
+    "grunt-contrib-uglify": "~0.7",
+    "grunt-contrib-jshint": "~0.10",
+    "grunt-endline": "~0.2"
+  },
+  "engines": {
+    "node": "^0.10"
+  },
+  "scripts": {
+    "prepublish": "npm prune",
+    "test": "mocha --bail --check-leaks test/"
+  },
+  "license": "GPLv3"
+}
