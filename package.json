@@ -1,7 +1,7 @@
 {
-  "version": "0.0.0",
+  "version": "0.0.1",
   "name": "mongodb-restore",
-  "description": "restore for mongodb-backup",
+  "description": "restore data from mongodb-backup",
   "keywords": [
     "mongodb",
     "restore"
