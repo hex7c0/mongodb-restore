@@ -52,6 +52,7 @@ describe('directory', function() {
 
     var second = fs.readdirSync(ROOT);
     assert.equal(second.length, 2); // .metadata + collection
+    assert.equal(second[1], 'auths');
     COLLECTION = second[1];
     client.connect(URI2, function(err, db) {
 
