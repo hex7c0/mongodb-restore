@@ -386,7 +386,6 @@ function wrapper(my) {
     logger('open tar file at ' + my.root + my.tar);
     makeDir(my.dir, function() {
 
-      rmDir(my.dir);
       var extractor = require('tar').Extract({
         path: my.dir
       }).on('error', error).on('end', function() {
