@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/hex7c0/mongodb-restore.svg)](https://travis-ci.org/hex7c0/mongodb-restore)
 [![Dependency Status](https://david-dm.org/hex7c0/mongodb-restore/status.svg)](https://david-dm.org/hex7c0/mongodb-restore)
 
-Restore data from [`mongodb-backup`](https://github.com/hex7c0/mongodb-backup).
+Restore data from [`mongodb-backup`](https://github.com/hex7c0/mongodb-backup)
 
 Look at [`mongodb-restore-cli`](https://github.com/hex7c0/mongodb-restore-cli) for command line usage, similar to [mongorestore](http://docs.mongodb.org/manual/reference/program/mongorestore/).
 
