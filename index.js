@@ -371,7 +371,7 @@ function wrapper(my) {
     if (my.metadata === true) {
       metadata = root + '.metadata/';
     }
-    client.connect(my.uri, function(err, db) {
+    client.connect(my.uri, my.options, function(err, db) {
 
       logger('db open');
       if (err !== null) {
@@ -438,7 +438,8 @@ function restore(options) {
     callback: typeof (opt.callback) == 'function' ? opt.callback : null,
     tar: typeof opt.tar === 'string' ? opt.tar : null,
     logger: typeof opt.logger === 'string' ? resolve(opt.logger) : null,
-    metadata: Boolean(opt.metadata)
+    metadata: Boolean(opt.metadata),
+    options: typeof opt.options === 'object' ? opt.options : {}
   };
   return wrapper(my);
 }
