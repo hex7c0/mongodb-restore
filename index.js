@@ -177,7 +177,7 @@ function fromJson(collection, collectionPath, next) {
   var docs = fs.readdirSync(collectionPath);
   var last = docs.length, index = 0;
   if (last < 1) {
-    return next(null);
+    return next();
   }
   docs.forEach(function(docName) {
 
@@ -200,7 +200,7 @@ function fromJson(collection, collectionPath, next) {
       if (err !== null) {
         return last === ++index ? next(err) : error(err);
       }
-      return last === ++index ? next(null) : null;
+      return last === ++index ? next() : null;
     });
   });
 }
@@ -218,7 +218,7 @@ function fromBson(collection, collectionPath, next) {
   var docs = fs.readdirSync(collectionPath);
   var last = docs.length, index = 0;
   if (last < 1) {
-    return next(null);
+    return next();
   }
   docs.forEach(function(docName) {
 
@@ -241,7 +241,7 @@ function fromBson(collection, collectionPath, next) {
       if (err !== null) {
         return last === ++index ? next(err) : error(err);
       }
-      return last === ++index ? next(null) : null;
+      return last === ++index ? next() : null;
     });
   });
 }
@@ -284,7 +284,7 @@ function allCollections(db, name, metadata, parser, next) {
 
         parser(collection, collectionPath + '/', function(err) {
 
-          if (err !== null) {
+          if (err) {
             return last === ++index ? next(err) : error(err);
           }
           return last === ++index ? next(null) : null;
