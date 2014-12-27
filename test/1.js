@@ -31,7 +31,6 @@ try {
 describe('start', function() {
 
   var ROOT = __dirname + '/dump';
-  this.timeout(5000);
 
   describe('init', function() {
 

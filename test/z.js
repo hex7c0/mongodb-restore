@@ -26,7 +26,6 @@ try {
 describe('last', function() {
 
   var ROOT = __dirname + '/dump/';
-  this.timeout(5000);
 
   describe('tar', function() {
 

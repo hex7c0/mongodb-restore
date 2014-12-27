@@ -34,7 +34,6 @@ describe('directory', function() {
   var ROOT = __dirname + '/dump/';
   var COLLECTION = '';
   var INDEX = [];
-  this.timeout(5000);
 
   it('should get db directory, not tar file', function(done) {
 

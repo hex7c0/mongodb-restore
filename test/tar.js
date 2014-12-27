@@ -34,7 +34,6 @@ describe('tar', function() {
   var ROOT = __dirname + '/dump/';
   var COLLECTION = 'logins';
   var INDEX = [];
-  this.timeout(5000);
 
   it('should get tar file, not db directory', function(done) {
 
