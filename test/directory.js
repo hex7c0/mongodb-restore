@@ -80,11 +80,18 @@ describe('directory', function() {
 
   describe('restore', function() {
 
+    var l = 'l1.log';
+    it('should check that log file not exist before test', function(done) {
+
+      assert.equal(fs.existsSync(l), false);
+      done();
+    });
     it('should save data to db', function(done) {
 
       restore({
         uri: URI,
         root: ROOT,
+        logger: l,
         metadata: true,
         callback: function() {
 
@@ -127,6 +134,14 @@ describe('directory', function() {
             });
           });
         });
+      });
+    });
+    it('should remove log', function(done) {
+
+      assert.equal(fs.existsSync(l), true);
+      fs.unlink(l, function() {
+
+        done();
       });
     });
   });

@@ -76,11 +76,18 @@ describe('tar', function() {
 
   describe('restore', function() {
 
+    var l = 'l2.log';
+    it('should check that log file not exist before test', function(done) {
+
+      assert.equal(fs.existsSync(l), false);
+      done();
+    });
     it('should save data to db', function(done) {
 
       restore({
         uri: URI,
         root: ROOT,
+        logger: l,
         tar: 't1.tar',
         callback: function() {
 
@@ -129,6 +136,14 @@ describe('tar', function() {
       assert.equal(fs.existsSync(paths), true); // stay alive
       assert.equal(fs.readdirSync(paths).length, 0, 'empty dir');
       done();
+    });
+    it('should remove log', function(done) {
+
+      assert.equal(fs.existsSync(l), true);
+      fs.unlink(l, function() {
+
+        done();
+      });
     });
   });
 });
