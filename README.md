@@ -33,7 +33,7 @@ var restore = require('mongodb-restore');
 
  - `uri` - **String** URI for MongoDb connection *(default "required")*
  - `root`- **String** Path where get the backup *(default "required")*
- - `[parser]` - **String** Data parser (bson, json) *(default "bson")*
+ - `[parser]` - **String | Function** Data parser (bson, json) or custom *(default "bson")*
  - `[callback]` - **Function** Callback *(default "disabled")*
  - `[tar]` - **String** Extract files from a .tar file *(default "disabled")*
  - `[logger]` - **String** Path where save log file *(default "disabled")*
