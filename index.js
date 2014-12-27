@@ -303,17 +303,21 @@ function allCollections(db, name, metadata, parser, next) {
 function wrapper(my) {
 
   var parser;
-  switch (my.parser) {
-    case 'bson':
-      BSON = mongo.pure().BSON;
-      parser = fromBson;
-      break;
-    case 'json':
-      // JSON error on ObjectId and Date
-      parser = fromJson;
-      break;
-    default:
-      throw new Error('missing parser option');
+  if (typeof my.parser === 'function') {
+    parser = my.parser;
+  } else {
+    switch (my.parser) {
+      case 'bson':
+        BSON = mongo.pure().BSON;
+        parser = fromBson;
+        break;
+      case 'json':
+        // JSON error on ObjectId and Date
+        parser = fromJson;
+        break;
+      default:
+        throw new Error('missing parser option');
+    }
   }
 
   var discriminator = allCollections;
@@ -425,7 +429,7 @@ function restore(options) {
     dir: __dirname + '/dump/',
     uri: String(opt.uri),
     root: resolve(String(opt.root)) + '/',
-    parser: String(opt.parser || 'bson'),
+    parser: opt.parser || 'bson',
     callback: typeof (opt.callback) == 'function' ? opt.callback : null,
     tar: typeof opt.tar === 'string' ? opt.tar : null,
     logger: typeof opt.logger === 'string' ? resolve(opt.logger) : null,
