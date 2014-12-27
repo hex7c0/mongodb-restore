@@ -336,6 +336,12 @@ function wrapper(my) {
       }
     });
     logger('restore start');
+    var log = require('mongodb').Logger;
+    log.setLevel('info');
+    log.setCurrentLogger(function(msg) {
+
+      logger(msg);
+    });
   }
 
   var metadata = '';
@@ -374,7 +380,7 @@ function wrapper(my) {
       // waiting for `db.fsyncLock()` on node driver
       discriminator(db, root, metadata, parser, function(err) {
 
-        if (err) {
+        if (err !== null) {
           error(err);
         }
         logger('db close');
