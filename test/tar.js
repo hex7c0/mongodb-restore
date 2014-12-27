@@ -92,7 +92,7 @@ describe('tar', function() {
 
       client.connect(URI, function(err, db) {
 
-        db.collectionNames(function(err, items) {
+        db.listCollections({}).toArray(function(err, items) {
 
           assert.equal(err, null);
           db.collection(COLLECTION, function(err, collection) {

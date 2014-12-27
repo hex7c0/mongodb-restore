@@ -19,8 +19,7 @@ try {
   var fs = require('fs');
   var resolve = require('path').resolve;
   // module
-  var mongo = require('mongodb');
-  var client = mongo.MongoClient;
+  var client = require('mongodb').MongoClient;
   var BSON;
   var logger;
   var meta;
@@ -195,7 +194,7 @@ function fromJson(collection, collectionPath, next) {
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
-    collection.save(doc, function(err) {
+    collection.insertOne(doc, function(err) {
 
       if (err !== null) {
         return last === ++index ? next(err) : error(err);
@@ -236,7 +235,7 @@ function fromBson(collection, collectionPath, next) {
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
-    collection.save(doc, function(err) {
+    collection.insertOne(doc, function(err) {
 
       if (err !== null) {
         return last === ++index ? next(err) : error(err);
@@ -308,7 +307,7 @@ function wrapper(my) {
   } else {
     switch (my.parser) {
       case 'bson':
-        BSON = mongo.pure().BSON;
+        BSON = require('bson').BSONPure.BSON;
         parser = fromBson;
         break;
       case 'json':

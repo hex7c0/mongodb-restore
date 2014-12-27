@@ -96,7 +96,7 @@ describe('directory', function() {
 
       client.connect(URI, function(err, db) {
 
-        db.collectionNames(function(err, items) {
+        db.listCollections({}).toArray(function(err, items) {
 
           assert.equal(err, null);
           // assert.equal(items.length, 2); // collection + indexes
