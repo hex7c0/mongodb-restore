@@ -182,8 +182,7 @@ function fromJson(collection, collectionPath, next) {
 
     var doc;
     var docPath = collectionPath + docName;
-    if (fs.statSync(docPath).isFile() === false
-        || /.json$/.test(docPath) === false) {
+    if (fs.statSync(docPath).isFile() === false) {
       var err = new Error('document is not a valid format');
       return last === ++index ? next(err) : error(err);
     }
@@ -194,7 +193,7 @@ function fromJson(collection, collectionPath, next) {
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
-    collection.insertOne(doc, function(err) {
+    collection.save(doc, function(err) {
 
       if (err !== null) {
         return last === ++index ? next(err) : error(err);
@@ -223,8 +222,7 @@ function fromBson(collection, collectionPath, next) {
 
     var doc;
     var docPath = collectionPath + docName;
-    if (fs.statSync(docPath).isFile() === false
-        || /.bson$/.test(docPath) === false) {
+    if (fs.statSync(docPath).isFile() === false) {
       var err = new Error('document is not a valid format');
       return last === ++index ? next(err) : error(err);
     }
@@ -235,7 +233,7 @@ function fromBson(collection, collectionPath, next) {
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
-    collection.insertOne(doc, function(err) {
+    collection.save(doc, function(err) {
 
       if (err !== null) {
         return last === ++index ? next(err) : error(err);
@@ -331,7 +329,7 @@ function wrapper(my) {
       filename: my.logger,
       standalone: true,
       winston: {
-        logger: '_mongo_r',
+        logger: '_mongo_r' + my.logger,
         level: 'info'
       }
     });
