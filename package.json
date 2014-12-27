@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "mocha": "~2.1",
-    "mongodb-backup": "~0.1",
+    "mongodb-backup": "~0.2",
     "grunt-contrib-clean": "~0.6",
     "grunt-contrib-uglify": "~0.7",
     "grunt-contrib-jshint": "~0.10",
