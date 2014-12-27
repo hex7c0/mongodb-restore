@@ -6,7 +6,7 @@
 
 Restore data from [`mongodb-backup`](https://github.com/hex7c0/mongodb-backup)
 
-Look at [`mongodb-restore-cli`](https://github.com/hex7c0/mongodb-restore-cli) for command line usage, similar to [mongorestore](http://docs.mongodb.org/manual/reference/program/mongorestore/).
+Look at [`mongodb-restore-cli`](https://github.com/hex7c0/mongodb-restore-cli) for command line usage, similar to [mongorestore](http://docs.mongodb.org/manual/reference/program/mongorestore/)
 
 ## Installation
 
@@ -32,12 +32,12 @@ var restore = require('mongodb-restore');
 #### options
 
  - `uri` - **String** URI for MongoDb connection *(default "required")*
- - `root`- **String** Path where save data *(default "required")*
+ - `root`- **String** Path where get the backup *(default "required")*
  - `[parser]` - **String** Data parser (bson, json) *(default "bson")*
  - `[callback]` - **Function** Callback *(default "disabled")*
- - `[tar]` - **String** Pack files into a .tar file *(default "disabled")*
+ - `[tar]` - **String** Extract files from a .tar file *(default "disabled")*
  - `[logger]` - **String** Path where save log file *(default "disabled")*
- - `[metadata]` - **Boolean** Save metadata of collections as Index, ecc *(default "false")*
+ - `[metadata]` - **Boolean** Set metadata of collections as Index, ecc *(default "false")*
 
 ## Examples
 
