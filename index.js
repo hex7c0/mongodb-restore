@@ -330,7 +330,8 @@ function wrapper(my) {
       standalone: true,
       winston: {
         logger: '_mongo_r' + my.logger,
-        level: 'info'
+        level: 'info',
+        json: false
       }
     });
     logger('restore start');
