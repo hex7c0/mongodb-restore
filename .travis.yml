@@ -1,13 +1,9 @@
 language: node_js
 sudo: false
 node_js:
-  - "0.11"
   - "0.10"
-matrix:
-  allow_failures:
-    - node_js: "0.11"
-  fast_finish: true
-script: "npm run-script test"
+  - "0.12"
+  - "iojs"
 notifications:
   email:
     on_success: never
