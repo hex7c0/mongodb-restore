@@ -1,8 +1,9 @@
 # [mongodb-restore](http://supergiovane.tk/#/mongodb-restore)
 
-[![NPM version](https://badge.fury.io/js/mongodb-restore.svg)](http://badge.fury.io/js/mongodb-restore)
-[![Build Status](https://travis-ci.org/hex7c0/mongodb-restore.svg)](https://travis-ci.org/hex7c0/mongodb-restore)
-[![Dependency Status](https://david-dm.org/hex7c0/mongodb-restore/status.svg)](https://david-dm.org/hex7c0/mongodb-restore)
+[![NPM version](https://img.shields.io/npm/v/mongodb-restore.svg)](https://www.npmjs.com/package/mongodb-restore)
+[![Linux Status](https://img.shields.io/travis/hex7c0/mongodb-restore.svg?label=linux)](https://travis-ci.org/hex7c0/mongodb-restore)
+[![Windows Status](https://img.shields.io/appveyor/ci/hex7c0/mongodb-restore.svg?label=windows)](https://ci.appveyor.com/project/hex7c0/mongodb-restore)
+[![Dependency Status](https://img.shields.io/david/hex7c0/mongodb-restore.svg)](https://david-dm.org/hex7c0/mongodb-restore)
 
 Restore data from [`mongodb-backup`](https://github.com/hex7c0/mongodb-backup)
 
@@ -42,6 +43,6 @@ var restore = require('mongodb-restore');
 
 ## Examples
 
-Take a look at my [examples](https://github.com/hex7c0/mongodb-restore/tree/master/examples)
+Take a look at my [examples](examples)
 
-### [License GPLv3](http://opensource.org/licenses/GPL-3.0)
+### [License GPLv3](LICENSE)
