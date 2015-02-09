@@ -2,7 +2,6 @@
 /**
  * @file mongodb-restore main
  * @module mongodb-restore
- * @package mongodb-restore
  * @subpackage main
  * @version 0.1.0
  * @author hex7c0 <hex7c0@gmail.com>
@@ -14,19 +13,10 @@
  * initialize module
  */
 // import
-try {
-  // node
-  var fs = require('fs');
-  var resolve = require('path').resolve;
-  // module
-  var client = require('mongodb').MongoClient;
-  var BSON;
-  var logger;
-  var meta;
-} catch (MODULE_NOT_FOUND) {
-  console.error(MODULE_NOT_FOUND);
-  process.exit(1);
-}
+var fs = require('fs');
+var BSON;
+var logger;
+var meta;
 
 /*
  * functions
@@ -370,23 +360,24 @@ function wrapper(my) {
     if (my.metadata === true) {
       metadata = root + '.metadata/';
     }
-    client.connect(my.uri, my.options, function(err, db) {
+    require('mongodb').MongoClient.connect(my.uri, my.options,
+      function(err, db) {
 
-      logger('db open');
-      if (err !== null) {
-        return error(err);
-      }
-      // waiting for `db.fsyncLock()` on node driver
-      discriminator(db, root, metadata, parser, function(err) {
-
+        logger('db open');
         if (err !== null) {
-          error(err);
+          return error(err);
         }
-        logger('db close');
-        db.close();
-        callback();
+        // waiting for `db.fsyncLock()` on node driver
+        discriminator(db, root, metadata, parser, function(err) {
+
+          if (err !== null) {
+            error(err);
+          }
+          logger('db close');
+          db.close();
+          callback();
+        });
       });
-    });
   };
   if (my.tar === null) {
     go(my.root);
@@ -419,6 +410,8 @@ function wrapper(my) {
  * @param {Object} options - various options. Check README.md
  */
 function restore(options) {
+
+  var resolve = require('path').resolve;
 
   var opt = options || Object.create(null);
   if (!opt.uri) {
