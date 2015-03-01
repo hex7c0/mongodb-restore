@@ -29,19 +29,22 @@
     "tar": "1.0.3"
   },
   "devDependencies": {
-    "mocha": "~2.1",
-    "mongodb-backup": "~1.0",
+    "coveralls": "~2.11",
+    "istanbul": "~0.3",
     "grunt-contrib-clean": "~0.6",
-    "grunt-contrib-uglify": "~0.7",
+    "grunt-contrib-uglify": "~0.8",
     "grunt-contrib-jshint": "~0.11",
-    "grunt-endline": "~0.2"
+    "grunt-endline": "~0.2",
+    "mocha": "~2.1",
+    "mongodb-backup": "~1.0"
   },
   "engines": {
     "node": ">=0.10"
   },
   "scripts": {
     "prepublish": "npm prune",
-    "test": "mocha --bail --check-leaks --timeout 5000"
+    "test": "mocha --bail --check-leaks --timeout 5000",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --timeout 5000"
   },
   "license": "GPLv3"
 }
