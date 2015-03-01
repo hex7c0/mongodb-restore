@@ -24,7 +24,6 @@ var stream = fs.createReadStream('download.tar');
 restore({
   uri: 'uri', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
   stream: stream,
-  tar: 'dump.tar', // just for enable tar
   callback: function() {
 
     console.log('done');

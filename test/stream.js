@@ -86,7 +86,6 @@ describe('stream', function() {
       restore({
         uri: URI,
         logger: l,
-        tar: '1',// just for enable
         stream: stream,
         callback: function() {
 

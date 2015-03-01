@@ -346,7 +346,7 @@ function wrapper(my) {
   function callback() {
 
     logger('restore stop');
-    if (my.tar !== null) {
+    if (my.tar) {
       rmDir(my.dir);
     }
     if (my.callback !== null) {
@@ -380,10 +380,10 @@ function wrapper(my) {
       });
   };
 
-  if (my.tar === null) {
+  if (!my.tar) {
     go(my.root);
+
   } else {
-    logger('open tar file at ' + my.root + my.tar);
     makeDir(my.dir, function() {
 
       var extractor = require('tar').Extract({
@@ -399,9 +399,11 @@ function wrapper(my) {
         }
       });
 
-      if (my.stream) { // user stream
+      if (my.stream !== null) { // user stream
+        logger('get tar file from stream');
         my.stream.pipe(extractor);
       } else { // filesystem stream
+        logger('open tar file at ' + my.root + my.tar);
         fs.createReadStream(my.root + my.tar).on('error', error)
         .pipe(extractor);
       }
@@ -444,6 +446,9 @@ function restore(options) {
     metadata: Boolean(opt.metadata),
     options: typeof opt.options === 'object' ? opt.options : {}
   };
+  if (my.stream) {
+    my.tar = true; // override
+  }
   return wrapper(my);
 }
 module.exports = restore;
