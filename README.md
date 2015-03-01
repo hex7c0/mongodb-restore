@@ -4,6 +4,7 @@
 [![Linux Status](https://img.shields.io/travis/hex7c0/mongodb-restore.svg?label=linux)](https://travis-ci.org/hex7c0/mongodb-restore)
 [![Windows Status](https://img.shields.io/appveyor/ci/hex7c0/mongodb-restore.svg?label=windows)](https://ci.appveyor.com/project/hex7c0/mongodb-restore)
 [![Dependency Status](https://img.shields.io/david/hex7c0/mongodb-restore.svg)](https://david-dm.org/hex7c0/mongodb-restore)
+[![Coveralls](https://img.shields.io/coveralls/hex7c0/mongodb-restore.svg)](https://coveralls.io/r/hex7c0/mongodb-restore)
 
 Restore data from [`mongodb-backup`](https://github.com/hex7c0/mongodb-backup)
 
@@ -26,6 +27,8 @@ git clone git://github.com/hex7c0/mongodb-restore.git
 inside nodejs project
 ```js
 var restore = require('mongodb-restore');
+
+restore();
 ```
 
 ### restore(options)
@@ -36,6 +39,7 @@ var restore = require('mongodb-restore');
  - `root`- **String** Path where get the backup *(default "required")*
  - `[parser]` - **String | Function** Data parser (bson, json) or custom *(default "bson")*
  - `[callback]` - **Function** Callback when done *(default "disabled")*
+ - `[stream]`- **Object** Get `.tar` file from Node stream *(default "disabled")*
  - `[tar]` - **String** Extract files from a .tar file *(default "disabled")*
  - `[logger]` - **String** Path where save a .log file *(default "disabled")*
  - `[metadata]` - **Boolean** Set metadata of collections as Index, ecc *(default "false")*
