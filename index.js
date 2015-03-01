@@ -379,6 +379,7 @@ function wrapper(my) {
         });
       });
   };
+
   if (my.tar === null) {
     go(my.root);
   } else {
@@ -397,7 +398,13 @@ function wrapper(my) {
           }
         }
       });
-      fs.createReadStream(my.root + my.tar).on('error', error).pipe(extractor);
+
+      if (my.stream) { // user stream
+        my.stream.pipe(extractor);
+      } else { // filesystem stream
+        fs.createReadStream(my.root + my.tar).on('error', error)
+        .pipe(extractor);
+      }
     });
   }
 }
@@ -416,16 +423,20 @@ function restore(options) {
   var opt = options || Object.create(null);
   if (!opt.uri) {
     throw new Error('missing uri option');
-  } else if (!opt.root) {
-    throw new Error('missing root option');
-  } else if (!fs.existsSync(opt.root) || !fs.statSync(opt.root).isDirectory()) {
-    throw new Error('root option is not a directory');
+  }
+  if (!opt.stream) {
+    if (!opt.root) {
+      throw new Error('missing root option');
+    } else if (!fs.existsSync(opt.root) || !fs.statSync(opt.root).isDirectory()) {
+      throw new Error('root option is not a directory');
+    }
   }
 
   var my = {
     dir: __dirname + '/dump/',
     uri: String(opt.uri),
     root: resolve(String(opt.root)) + '/',
+    stream: opt.stream || null,
     parser: opt.parser || 'bson',
     callback: typeof (opt.callback) == 'function' ? opt.callback : null,
     tar: typeof opt.tar === 'string' ? opt.tar : null,
