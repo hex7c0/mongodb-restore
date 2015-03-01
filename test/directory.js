@@ -2,7 +2,6 @@
 /**
  * @file directory test
  * @module mongodb-restore
- * @package mongodb-restore
  * @subpackage test
  * @version 0.0.1
  * @author hex7c0 <hex7c0@gmail.com>
@@ -12,18 +11,12 @@
 /*
  * initialize module
  */
-// import
-try {
-  var restore = require('..');
-  var assert = require('assert');
-  var fs = require('fs');
-  var client = require('mongodb').MongoClient;
-  var URI = process.env.URI;
-  var URI2 = process.env.URI2;
-} catch (MODULE_NOT_FOUND) {
-  console.error(MODULE_NOT_FOUND);
-  process.exit(1);
-}
+var restore = require('..');
+var assert = require('assert');
+var fs = require('fs');
+var client = require('mongodb').MongoClient;
+var URI = process.env.URI;
+var URI2 = process.env.URI2;
 
 /*
  * test module
@@ -139,10 +132,7 @@ describe('directory', function() {
     it('should remove log', function(done) {
 
       assert.equal(fs.existsSync(l), true);
-      fs.unlink(l, function() {
-
-        done();
-      });
+      fs.unlink(l, done);
     });
   });
 });

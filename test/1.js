@@ -2,7 +2,6 @@
 /**
  * @file 1 test
  * @module mongodb-restore
- * @package mongodb-restore
  * @subpackage test
  * @version 0.0.1
  * @author hex7c0 <hex7c0@gmail.com>
@@ -12,18 +11,12 @@
 /*
  * initialize module
  */
-// import
-try {
-  var backup = require('mongodb-backup');
-  var assert = require('assert');
-  var fs = require('fs');
-  var client = require('mongodb').MongoClient;
-  var URI = process.env.URI;
-  var URI2 = process.env.URI2;
-} catch (MODULE_NOT_FOUND) {
-  console.error(MODULE_NOT_FOUND);
-  process.exit(1);
-}
+var backup = require('mongodb-backup');
+var assert = require('assert');
+var fs = require('fs');
+var client = require('mongodb').MongoClient;
+var URI = process.env.URI;
+var URI2 = process.env.URI2;
 
 /*
  * test module
@@ -78,7 +71,9 @@ describe('start', function() {
 
     describe('tar', function() {
 
-      var path = ROOT + '/t1.tar';
+      var path0 = ROOT + '/t1.tar';
+      var path1 = ROOT + '/t_stream.tar';
+
       it('should make a tar file', function(done) {
 
         backup({
@@ -87,8 +82,21 @@ describe('start', function() {
           tar: 't1.tar',
           callback: function() {
 
-            assert.equal(fs.existsSync(path), true);
+            assert.equal(fs.existsSync(path0), true);
+            done();
+          }
+        });
+      });
+      it('should make a tar file for stream', function(done) {
 
+        backup({
+          uri: URI2,
+          root: ROOT,
+          collections: [ 'logins' ],
+          tar: 't_stream.tar',
+          callback: function() {
+
+            assert.equal(fs.existsSync(path1), true);
             done();
           }
         });

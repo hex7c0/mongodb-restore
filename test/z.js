@@ -2,7 +2,6 @@
 /**
  * @file z test
  * @module mongodb-restore
- * @package mongodb-restore
  * @subpackage test
  * @version 0.0.1
  * @author hex7c0 <hex7c0@gmail.com>
@@ -12,13 +11,7 @@
 /*
  * initialize module
  */
-// import
-try {
-  var fs = require('fs');
-} catch (MODULE_NOT_FOUND) {
-  console.error(MODULE_NOT_FOUND);
-  process.exit(1);
-}
+var fs = require('fs');
 
 /*
  * test module
@@ -29,12 +22,13 @@ describe('last', function() {
 
   describe('tar', function() {
 
-    it('should unlink tar file', function(done) {
+    it('should unlink tar0 file', function(done) {
 
-      fs.unlink(ROOT + 't1.tar', function() {
+      fs.unlink(ROOT + 't1.tar', done);
+    });
+    it('should unlink tar1 file', function(done) {
 
-        done();
-      });
+      fs.unlink(ROOT + 't_stream.tar', done);
     });
   });
 
