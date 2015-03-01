@@ -43,6 +43,7 @@ restore();
  - `[tar]` - **String** Extract files from a .tar file *(default "disabled")*
  - `[logger]` - **String** Path where save a .log file *(default "disabled")*
  - `[metadata]` - **Boolean** Set metadata of collections as Index, ecc *(default "false")*
+ - `[drop]` - **Boolean** Drop every collection from the target database before restoring the collection *(default "false")*
  - `[options]` - **Object** MongoDb [options](http://mongodb.github.io/node-mongodb-native/2.0/tutorials/connecting/#toc_7) *(default)*
 
 ## Examples

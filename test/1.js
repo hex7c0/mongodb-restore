@@ -25,33 +25,18 @@ describe('start', function() {
 
   var ROOT = __dirname + '/dump';
 
-  describe('init', function() {
-
-    it('should drop all database for correct tests', function(done) {
-
-      client.connect(URI, function(err, db) {
-
-        db.dropDatabase(function(err, collection) {
-
-          assert.equal(err, null);
-          db.close();
-          done();
-        });
-      });
-    });
-  });
-
   describe('mongodb-backup', function() {
 
     describe('directory', function() {
 
-      it('should build 1 directory', function(done) {
+      it('should build 1 directory and drop database', function(done) {
 
         backup({
           uri: URI2,
           root: ROOT,
           collections: [ 'auths' ],
           metadata: true,
+          drop: true,
           callback: function() {
 
             fs.readdirSync(ROOT).forEach(function(first) { // database

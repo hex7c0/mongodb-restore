@@ -70,7 +70,7 @@ function readMetadata(collection, metadata, next) {
     var name = indexes.name.substr(0, indexes.name.length - 2);
     collection.createIndex(name, indexes, function(err) {
 
-      if (err !== null) {
+      if (err) {
         error(err);
       }
       if (++c === ii) {
@@ -91,7 +91,7 @@ function makeDir(path, next) {
 
   fs.stat(path, function(err, stats) {
 
-    if (err !== null && err.code === 'ENOENT') {
+    if (err && err.code === 'ENOENT') {
       logger('make dir at ' + path);
       fs.mkdir(path, next(null, path));
     } else if (stats !== undefined && stats.isDirectory() === false) {
@@ -185,7 +185,7 @@ function fromJson(collection, collectionPath, next) {
     }
     collection.save(doc, function(err) {
 
-      if (err !== null) {
+      if (err) {
         return last === ++index ? next(err) : error(err);
       }
       return last === ++index ? next() : null;
@@ -225,7 +225,7 @@ function fromBson(collection, collectionPath, next) {
     }
     collection.save(doc, function(err) {
 
-      if (err !== null) {
+      if (err) {
         return last === ++index ? next(err) : error(err);
       }
       return last === ++index ? next() : null;
@@ -263,7 +263,7 @@ function allCollections(db, name, metadata, parser, next) {
     }
     db.createCollection(collectionName, function(err, collection) {
 
-      if (err !== null) {
+      if (err) {
         return last === ++index ? next(err) : error(err);
       }
       logger('select collection ' + collectionName);
@@ -360,55 +360,71 @@ function wrapper(my) {
     if (my.metadata === true) {
       metadata = root + '.metadata/';
     }
-    require('mongodb').MongoClient.connect(my.uri, my.options,
+    return require('mongodb').MongoClient.connect(my.uri, my.options,
       function(err, db) {
 
         logger('db open');
-        if (err !== null) {
+        if (err) {
           return error(err);
         }
-        // waiting for `db.fsyncLock()` on node driver
-        discriminator(db, root, metadata, parser, function(err) {
 
-          if (err !== null) {
-            error(err);
-          }
-          logger('db close');
-          db.close();
-          callback();
-        });
+        var next = function() {
+
+          // waiting for `db.fsyncLock()` on node driver
+          discriminator(db, root, metadata, parser, function(err) {
+
+            if (err) {
+              error(err);
+            }
+            logger('db close');
+            db.close();
+            callback();
+          });
+        };
+
+        if (my.drop === true) {
+          logger('drop database');
+          db.dropDatabase(function(err) {
+
+            if (err) {
+              error(err);
+            }
+            return next();
+          });
+        } else {
+          next();
+        }
+        return;
       });
   };
 
   if (!my.tar) {
-    go(my.root);
+    return go(my.root);
+  }
 
-  } else {
-    makeDir(my.dir, function() {
+  return makeDir(my.dir, function() {
 
-      var extractor = require('tar').Extract({
-        path: my.dir
-      }).on('error', error).on('end', function() {
+    var extractor = require('tar').Extract({
+      path: my.dir
+    }).on('error', error).on('end', function() {
 
-        var dirs = fs.readdirSync(my.dir);
-        for (var i = 0, ii = dirs.length; i < ii; i++) {
-          var t = my.dir + dirs[i];
-          if (fs.statSync(t).isFile() === false) {
-            return go(t + '/');
-          }
+      var dirs = fs.readdirSync(my.dir);
+      for (var i = 0, ii = dirs.length; i < ii; i++) {
+        var t = my.dir + dirs[i];
+        if (fs.statSync(t).isFile() === false) {
+          return go(t + '/');
         }
-      });
-
-      if (my.stream !== null) { // user stream
-        logger('get tar file from stream');
-        my.stream.pipe(extractor);
-      } else { // filesystem stream
-        logger('open tar file at ' + my.root + my.tar);
-        fs.createReadStream(my.root + my.tar).on('error', error)
-        .pipe(extractor);
       }
     });
-  }
+
+    if (my.stream !== null) { // user stream
+      logger('get tar file from stream');
+      my.stream.pipe(extractor);
+    } else { // filesystem stream
+      logger('open tar file at ' + my.root + my.tar);
+      fs.createReadStream(my.root + my.tar).on('error', error).pipe(extractor);
+    }
+  });
 }
 
 /**
@@ -444,6 +460,7 @@ function restore(options) {
     tar: typeof opt.tar === 'string' ? opt.tar : null,
     logger: typeof opt.logger === 'string' ? resolve(opt.logger) : null,
     metadata: Boolean(opt.metadata),
+    drop: Boolean(opt.drop),
     options: typeof opt.options === 'object' ? opt.options : {}
   };
   if (my.stream) {
