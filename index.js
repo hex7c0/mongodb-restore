@@ -89,20 +89,26 @@ function readMetadata(collection, metadata, next) {
  */
 function makeDir(path, next) {
 
-  fs.stat(path, function(err, stats) {
+  return fs.stat(path, function(err, stats) {
 
     if (err && err.code === 'ENOENT') {
       logger('make dir at ' + path);
-      fs.mkdir(path, next(null, path));
-    } else if (stats !== undefined && stats.isDirectory() === false) {
-      logger('make dir at ' + path);
-      fs.unlink(path, function() {
+      return fs.mkdir(path, function(err) {
 
-        fs.mkdir(path, next(error(new Error('path was a file')), path));
+        return next(err, path);
       });
-    } else {
-      next(null, path);
+    } else if (stats && stats.isDirectory() === false) {
+      logger('unlink file at ' + path);
+      return fs.unlink(path, function() {
+
+        logger('make dir at ' + path);
+        return fs.mkdir(path, function(err) {
+
+          return next(err, path);
+        });
+      });
     }
+    return next(null, path);
   });
 }
 
@@ -136,7 +142,7 @@ function rmDir(path, next) {
       fs.readdirSync(collection).forEach(function(third) { // document
 
         var document = collection + '/' + third;
-        if (next !== undefined) {
+        if (next) {
           next(null, document);
         }
         fs.unlinkSync(document);

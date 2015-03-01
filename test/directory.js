@@ -86,6 +86,7 @@ describe('directory', function() {
         root: ROOT,
         logger: l,
         metadata: true,
+        drop: false, // for coverage
         callback: function() {
 
           setTimeout(done, 500); // time for mongod
