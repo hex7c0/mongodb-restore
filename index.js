@@ -287,6 +287,45 @@ function allCollections(db, name, metadata, parser, next) {
   });
 }
 
+
+/**
+ * drop each collection in a given database
+ *
+ * @function dropCollections
+ * @param {Object} db - database
+ * @param {Function} next - callback
+ */
+function dropCollections(db, next) {
+
+  logger('drop collections');
+  db.collections(function(err,cols) {
+    if (err) {
+      error(err);
+    }
+    var i = 0;
+    cols.forEach(function(col){
+      i++
+      if(col.s.name !== 'system.indexes'){
+        col.drop(function(err, col){
+          if (err) {
+            error(err);
+          }
+          if (i === cols.length){
+            next();
+          }
+        });
+      }else{
+        if (i === cols.length){
+          next();
+        }
+      }
+    });
+  });
+
+}
+
+
+
 /**
  * function wrapper
  * 
@@ -389,14 +428,7 @@ function wrapper(my) {
         };
 
         if (my.drop === true) {
-          logger('drop database');
-          db.dropDatabase(function(err) {
-
-            if (err) {
-              error(err);
-            }
-            return next();
-          });
+          dropCollections(db, next);
         } else {
           next();
         }
