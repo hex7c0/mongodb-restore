@@ -28,7 +28,10 @@ inside nodejs project
 ```js
 var restore = require('mongodb-restore');
 
-restore();
+restore({
+  uri: 'uri', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
+  root: __dirname + '/db'
+});
 ```
 
 ### restore(options)
