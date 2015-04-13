@@ -3,7 +3,7 @@
  * @file fs stream example
  * @module mongodb-restore
  * @subpackage examples
- * @version 0.0.0
+ * @version 0.0.1
  * @author hex7c0 <hex7c0@gmail.com>
  * @license GPLv3
  */
@@ -11,7 +11,6 @@
 /*
  * initialize module
  */
-// import
 var restore = require('..'); // use require('mongodb-restore') instead
 var fs = require('fs');
 
