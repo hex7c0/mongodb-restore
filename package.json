@@ -26,7 +26,7 @@
     "bson": "0.3.2",
     "mongodb": "2.0.31",
     "logger-request": "3.3.3",
-    "tar": "2.0.1"
+    "tar": "2.1.1"
   },
   "devDependencies": {
     "coveralls": "~2.11",
