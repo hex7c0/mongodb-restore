@@ -300,7 +300,8 @@ function wrapper(my) {
   } else {
     switch (my.parser) {
       case 'bson':
-        BSON = require('bson').BSONPure.BSON;
+        BSON = require('bson');
+        BSON = new BSON.BSONPure.BSON();
         parser = fromBson;
         break;
       case 'json':
