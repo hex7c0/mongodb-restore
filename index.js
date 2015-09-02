@@ -58,7 +58,7 @@ function readMetadata(collection, metadata, next) {
   if (doc.length === 0) {
     return next();
   }
-  for (var i = 0, c = 0, ii = doc.length; i < ii; i++) {
+  for (var i = 0, c = 0, ii = doc.length; i < ii; ++i) {
     var indexes = doc[i];
     if (/^_id/.test(indexes.name) === true) {
       if (++c === ii) {
@@ -75,6 +75,7 @@ function readMetadata(collection, metadata, next) {
       if (++c === ii) {
         next();
       }
+      return;
     });
   }
 }
@@ -96,6 +97,7 @@ function makeDir(path, next) {
 
         return next(err, path);
       });
+
     } else if (stats && stats.isDirectory() === false) {
       logger('unlink file at ' + path);
       return fs.unlink(path, function() {
@@ -107,6 +109,7 @@ function makeDir(path, next) {
         });
       });
     }
+
     return next(null, path);
   });
 }
@@ -126,12 +129,14 @@ function rmDir(path, next) {
     if (fs.statSync(database).isDirectory() === false) {
       return;
     }
+
     var metadata = '';
     var collections = fs.readdirSync(database);
     if (fs.existsSync(database + '/.metadata') === true) {
       metadata = database + '/.metadata/';
       delete collections[collections.indexOf('.metadata')]; // undefined is not a dir
     }
+
     collections.forEach(function(second) { // collection
 
       var collection = database + '/' + second;
@@ -141,20 +146,20 @@ function rmDir(path, next) {
       fs.readdirSync(collection).forEach(function(third) { // document
 
         var document = collection + '/' + third;
-        if (next) {
-          next(null, document);
-        }
         fs.unlinkSync(document);
+        return next ? next(null, document) : '';
       });
+
       if (metadata !== '') {
         fs.unlinkSync(metadata + second);
       }
-      fs.rmdirSync(collection);
+      return fs.rmdirSync(collection);
     });
+
     if (metadata !== '') {
       fs.rmdirSync(metadata);
     }
-    fs.rmdirSync(database);
+    return fs.rmdirSync(database);
   });
 }
 
@@ -173,7 +178,8 @@ function fromJson(collection, collectionPath, next) {
   if (last < 1) {
     return next();
   }
-  docs.forEach(function(docName) {
+
+  return docs.forEach(function(docName) {
 
     var doc;
     var docPath = collectionPath + docName;
@@ -188,7 +194,8 @@ function fromJson(collection, collectionPath, next) {
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
-    collection.save(doc, function(err) {
+
+    return collection.save(doc, function(err) {
 
       if (err) {
         return last === ++index ? next(err) : error(err);
@@ -213,7 +220,8 @@ function fromBson(collection, collectionPath, next) {
   if (last < 1) {
     return next();
   }
-  docs.forEach(function(docName) {
+
+  return docs.forEach(function(docName) {
 
     var doc;
     var docPath = collectionPath + docName;
@@ -228,7 +236,8 @@ function fromBson(collection, collectionPath, next) {
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
-    collection.save(doc, function(err) {
+
+    return collection.save(doc, function(err) {
 
       if (err) {
         return last === ++index ? next(err) : error(err);
@@ -255,26 +264,28 @@ function allCollections(db, name, metadata, parser, next) {
   if (last < 1) {
     return next(null);
   }
+
   if (collections.indexOf('.metadata') >= 0) { // undefined is not a dir
     delete collections[collections.indexOf('.metadata')];
     last--;
   }
-  collections.forEach(function(collectionName) {
+
+  return collections.forEach(function(collectionName) {
 
     var collectionPath = name + collectionName;
     if (!fs.statSync(collectionPath).isDirectory()) {
       var err = new Error(collectionPath + ' is not a directory');
       return last === ++index ? next(err) : error(err);
     }
-    db.createCollection(collectionName, function(err, collection) {
+    return db.createCollection(collectionName, function(err, collection) {
 
       if (err) {
         return last === ++index ? next(err) : error(err);
       }
       logger('select collection ' + collectionName);
-      meta(collection, metadata, function() {
+      return meta(collection, metadata, function() {
 
-        parser(collection, collectionPath + '/', function(err) {
+        return parser(collection, collectionPath + '/', function(err) {
 
           if (err) {
             return last === ++index ? next(err) : error(err);
@@ -335,7 +346,7 @@ function wrapper(my) {
     log.setLevel('info');
     log.setCurrentLogger(function(msg) {
 
-      logger(msg);
+      return logger(msg);
     });
   }
 
@@ -349,6 +360,11 @@ function wrapper(my) {
     };
   }
 
+  /**
+   * end point
+   * 
+   * @return {Null}
+   */
   function callback() {
 
     logger('restore stop');
@@ -359,9 +375,15 @@ function wrapper(my) {
       logger('callback run');
       my.callback();
     }
+    return;
   }
 
-  var go = function(root) {
+  /**
+   * entry point
+   * 
+   * @return {Null}
+   */
+  function go(root) {
 
     if (my.metadata === true) {
       metadata = root + '.metadata/';
@@ -374,35 +396,35 @@ function wrapper(my) {
           return error(err);
         }
 
-        var next = function() {
+        function next() {
 
           // waiting for `db.fsyncLock()` on node driver
-          discriminator(db, root, metadata, parser, function(err) {
+          return discriminator(db, root, metadata, parser, function(err) {
 
             if (err) {
               error(err);
             }
             logger('db close');
             db.close();
-            callback();
+
+            return callback();
           });
-        };
+        }
 
         if (my.drop === true) {
           logger('drop database');
-          db.dropDatabase(function(err) {
+          return db.dropDatabase(function(err) {
 
             if (err) {
               error(err);
             }
             return next();
           });
-        } else {
-          next();
         }
-        return;
+
+        return next();
       });
-  };
+  }
 
   if (!my.tar) {
     return go(my.root);
@@ -421,6 +443,7 @@ function wrapper(my) {
           return go(t + '/');
         }
       }
+      return;
     });
 
     if (my.stream !== null) { // user stream
@@ -430,6 +453,7 @@ function wrapper(my) {
       logger('open tar file at ' + my.root + my.tar);
       fs.createReadStream(my.root + my.tar).on('error', error).pipe(extractor);
     }
+    return;
   });
 }
 
