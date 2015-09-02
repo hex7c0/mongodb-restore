@@ -17,13 +17,12 @@ var fs = require('fs');
 /*
  * use
  */
-// simulate filesystem stream
-var stream = fs.createReadStream('download.tar');
+var stream = fs.createReadStream('download.tar'); // simulate filesystem stream
 
 restore({
   uri: 'uri', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-  stream: stream,
-  callback: function() {
+  stream: stream, // send this stream into db
+  callback: function(err) { // callback after restore
 
     console.log('done');
   }

@@ -18,5 +18,5 @@ var restore = require('..'); // use require('mongodb-restore') instead
  */
 restore({
   uri: 'uri', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-  root: __dirname + '/db'
+  root: __dirname, // read backup(s) file(s) from this dir
 });
