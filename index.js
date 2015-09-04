@@ -298,6 +298,40 @@ function allCollections(db, name, metadata, parser, next) {
 }
 
 /**
+ * drop data from some collections
+ * 
+ * @function someCollections
+ * @param {Object} db - database
+ * @param {Array} collections - selected collections
+ * @param {Function} next - callback
+ */
+function someCollections(db, collections, next) {
+
+  var last = collections.length, index = 0;
+  if (last < 1) {
+    return next(null);
+  }
+
+  return collections.forEach(function(collection) {
+
+    return db.collection(collection, function(err, collection) {
+
+      logger('select collection ' + collection.collectionName);
+      if (err) {
+        return last === ++index ? next(err) : error(err);
+      }
+      collection.drop(function(err) {
+
+        if (err) {
+          return last === ++index ? next(err) : error(err);
+        }
+        return last === ++index ? next(null) : null;
+      });
+    });
+  });
+}
+
+/**
  * function wrapper
  * 
  * @function wrapper
@@ -396,7 +430,14 @@ function wrapper(my) {
           return error(err);
         }
 
-        function next() {
+        function next(err) {
+
+          if (err) {
+            error(err);
+            logger('db close');
+            db.close();
+            return callback();
+          }
 
           // waiting for `db.fsyncLock()` on node driver
           return discriminator(db, root, metadata, parser, function(err) {
@@ -415,10 +456,31 @@ function wrapper(my) {
           logger('drop database');
           return db.dropDatabase(function(err) {
 
+            return next(err);
+          });
+        } else if (my.dropCollections) {
+          logger('drop collections');
+          if (Array.isArray(my.dropCollections) === true) {
+            return someCollections(db, my.dropCollections, function(err) {
+
+              return next(err);
+            });
+          }
+          return db.collections(function(err, collections) {
+
             if (err) {
               error(err);
             }
-            return next();
+            my.dropCollections = [];
+            for (var i = 0, ii = collections.length; i < ii; i++) {
+              if (/^system./.test(collections[i].collectionName) === false) {
+                my.dropCollections.push(collections[i].collectionName);
+              }
+            }
+            return someCollections(db, my.dropCollections, function(err) {
+
+              return next(err);
+            });
           });
         }
 
@@ -486,11 +548,12 @@ function restore(options) {
     root: resolve(String(opt.root)) + '/',
     stream: opt.stream || null,
     parser: opt.parser || 'bson',
-    callback: typeof (opt.callback) == 'function' ? opt.callback : null,
+    callback: typeof opt.callback === 'function' ? opt.callback : null,
     tar: typeof opt.tar === 'string' ? opt.tar : null,
     logger: typeof opt.logger === 'string' ? resolve(opt.logger) : null,
     metadata: Boolean(opt.metadata),
     drop: Boolean(opt.drop),
+    dropCollections: Boolean(opt.dropCollections) ? opt.dropCollections : null,
     options: typeof opt.options === 'object' ? opt.options : {}
   };
   if (my.stream) {
