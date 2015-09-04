@@ -47,6 +47,7 @@ restore({
  - `[logger]` - **String** Path where save a .log file *(default "disabled")*
  - `[metadata]` - **Boolean** Set metadata of collections as Index, ecc *(default "false")*
  - `[drop]` - **Boolean** Drop every collection from the target database before restoring the collection *(default "false")*
+ - `[dropCollections]` - **Boolean|Array** Drop every collection from the target database before restoring, if Boolean or selected collections if Array *(default "false")*
  - `[options]` - **Object** MongoDb [options](http://mongodb.github.io/node-mongodb-native/2.0/tutorials/connecting/#toc_7) *(default)*
 
 ## Examples
