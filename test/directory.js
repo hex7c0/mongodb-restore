@@ -136,4 +136,268 @@ describe('directory', function() {
       fs.unlink(l, done);
     });
   });
+
+  describe('restore - drop', function() {
+
+    var l = 'ld1.log';
+    it('should check that log file not exist before test', function(done) {
+
+      assert.equal(fs.existsSync(l), false);
+      done();
+    });
+    it('should save data to db', function(done) {
+
+      restore({
+        uri: URI,
+        root: ROOT,
+        logger: l,
+        metadata: true,
+        drop: true,
+        callback: function() {
+
+          setTimeout(done, 500); // time for mongod
+        }
+      });
+    });
+    it('should test original data and saved data', function(done) {
+
+      client.connect(URI, function(err, db) {
+
+        db.listCollections({}).toArray(function(err, items) {
+
+          assert.equal(err, null);
+          // assert.equal(items.length, 2); // collection + indexes
+          assert.equal(items.length >= 2, true); // travis same workspace
+          db.collection(COLLECTION, function(err, collection) {
+
+            assert.equal(err, null);
+            collection.indexes(function(err, index) {
+
+              assert.equal(err, null);
+              assert.equal(index.length, INDEX.length);
+              for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
+                delete index[i].ns;
+                delete INDEX[i].ns;
+              }
+              assert.equal(index[0].name, INDEX[0].name);
+              // assert.deepEqual(index, INDEX); // not work on travis. but it's ok in local istance
+              collection.find({}, {
+                sort: {
+                  _id: 1
+                }
+              }).toArray(function(err, docs) {
+
+                assert.equal(err, null);
+                assert.deepEqual(docs, DOCS); // same above
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should remove log', function(done) {
+
+      assert.equal(fs.existsSync(l), true);
+      fs.unlink(l, done);
+    });
+  });
+
+  describe('restore - dropCollections without Array', function() {
+
+    var l = 'ldc1.log';
+    it('should check that log file not exist before test', function(done) {
+
+      assert.equal(fs.existsSync(l), false);
+      done();
+    });
+    it('should save data to db', function(done) {
+
+      restore({
+        uri: URI,
+        root: ROOT,
+        logger: l,
+        metadata: true,
+        dropCollections: true,
+        callback: function() {
+
+          setTimeout(done, 500); // time for mongod
+        }
+      });
+    });
+    it('should test original data and saved data', function(done) {
+
+      client.connect(URI, function(err, db) {
+
+        db.listCollections({}).toArray(function(err, items) {
+
+          assert.equal(err, null);
+          // assert.equal(items.length, 2); // collection + indexes
+          assert.equal(items.length >= 2, true); // travis same workspace
+          db.collection(COLLECTION, function(err, collection) {
+
+            assert.equal(err, null);
+            collection.indexes(function(err, index) {
+
+              assert.equal(err, null);
+              assert.equal(index.length, INDEX.length);
+              for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
+                delete index[i].ns;
+                delete INDEX[i].ns;
+              }
+              assert.equal(index[0].name, INDEX[0].name);
+              // assert.deepEqual(index, INDEX); // not work on travis. but it's ok in local istance
+              collection.find({}, {
+                sort: {
+                  _id: 1
+                }
+              }).toArray(function(err, docs) {
+
+                assert.equal(err, null);
+                assert.deepEqual(docs, DOCS); // same above
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should remove log', function(done) {
+
+      assert.equal(fs.existsSync(l), true);
+      fs.unlink(l, done);
+    });
+  });
+
+  describe('restore - dropCollections with Array', function() {
+
+    var l = 'lda1.log';
+    it('should check that log file not exist before test', function(done) {
+
+      assert.equal(fs.existsSync(l), false);
+      done();
+    });
+    it('should save data to db', function(done) {
+
+      restore({
+        uri: URI,
+        root: ROOT,
+        logger: l,
+        metadata: true,
+        dropCollections: [ 'auth' ],
+        callback: function() {
+
+          setTimeout(done, 500); // time for mongod
+        }
+      });
+    });
+    it('should test original data and saved data', function(done) {
+
+      client.connect(URI, function(err, db) {
+
+        db.listCollections({}).toArray(function(err, items) {
+
+          assert.equal(err, null);
+          // assert.equal(items.length, 2); // collection + indexes
+          assert.equal(items.length >= 2, true); // travis same workspace
+          db.collection(COLLECTION, function(err, collection) {
+
+            assert.equal(err, null);
+            collection.indexes(function(err, index) {
+
+              assert.equal(err, null);
+              assert.equal(index.length, INDEX.length);
+              for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
+                delete index[i].ns;
+                delete INDEX[i].ns;
+              }
+              assert.equal(index[0].name, INDEX[0].name);
+              // assert.deepEqual(index, INDEX); // not work on travis. but it's ok in local istance
+              collection.find({}, {
+                sort: {
+                  _id: 1
+                }
+              }).toArray(function(err, docs) {
+
+                assert.equal(err, null);
+                assert.deepEqual(docs, DOCS); // same above
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should remove log', function(done) {
+
+      assert.equal(fs.existsSync(l), true);
+      fs.unlink(l, done);
+    });
+  });
+
+  describe('restore - dropCollections wrong Array', function() {
+
+    var l = 'ldw1.log';
+    it('should check that log file not exist before test', function(done) {
+
+      assert.equal(fs.existsSync(l), false);
+      done();
+    });
+    it('should save data to db', function(done) {
+
+      restore({
+        uri: URI,
+        root: ROOT,
+        logger: l,
+        metadata: true,
+        dropCollections: {},
+        callback: function() {
+
+          setTimeout(done, 500); // time for mongod
+        }
+      });
+    });
+    it('should test original data and saved data', function(done) {
+
+      client.connect(URI, function(err, db) {
+
+        db.listCollections({}).toArray(function(err, items) {
+
+          assert.equal(err, null);
+          // assert.equal(items.length, 2); // collection + indexes
+          assert.equal(items.length >= 2, true); // travis same workspace
+          db.collection(COLLECTION, function(err, collection) {
+
+            assert.equal(err, null);
+            collection.indexes(function(err, index) {
+
+              assert.equal(err, null);
+              assert.equal(index.length, INDEX.length);
+              for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
+                delete index[i].ns;
+                delete INDEX[i].ns;
+              }
+              assert.equal(index[0].name, INDEX[0].name);
+              // assert.deepEqual(index, INDEX); // not work on travis. but it's ok in local istance
+              collection.find({}, {
+                sort: {
+                  _id: 1
+                }
+              }).toArray(function(err, docs) {
+
+                assert.equal(err, null);
+                assert.deepEqual(docs, DOCS); // same above
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should remove log', function(done) {
+
+      assert.equal(fs.existsSync(l), true);
+      fs.unlink(l, done);
+    });
+  });
 });

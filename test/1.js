@@ -36,7 +36,6 @@ describe('start', function() {
           root: ROOT,
           collections: [ 'auths' ],
           metadata: true,
-          drop: true,
           callback: function() {
 
             fs.readdirSync(ROOT).forEach(function(first) { // database
