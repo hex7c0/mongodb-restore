@@ -24,7 +24,7 @@
   },
   "main": "index.min.js",
   "dependencies": {
-    "bson": "~0.4",
+    "bson": "0.4.15",
     "mongodb": "2.0.45",
     "logger-request": "3.4.0",
     "tar": "2.2.1"
@@ -37,7 +37,7 @@
     "grunt-endline": "~0.3",
     "istanbul": "~0.3",
     "mocha": "~2.3",
-    "mongodb-backup": "~1.4"
+    "mongodb-backup": "~1.2"
   },
   "engines": {
     "node": ">=0.10"
