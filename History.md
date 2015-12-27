@@ -1,54 +1,62 @@
-1.4.2 / 2014-10-07
+v1.4.3 / 2014-12-27
+==================
+
+  * Tested against `node`@5
+  * Update `logger-request`@3.6.0
+  * Update `mongodb`@2.0.53
+  * Update `bson`@0.4.20
+
+v1.4.2 / 2014-10-07
 ==================
 
   * Update `mongodb`@2.0.45
   * Update `bson`@0.4.16
 
-1.4.1 / 2014-09-17
+v1.4.1 / 2014-09-17
 ==================
 
-  * Tested with `node`@4
+  * Tested against `node`@4
   * Update `mongodb`@2.0.43
   * Update `tar`@2.2.1
 
-1.4.0 / 2014-09-03
+v1.4.0 / 2014-09-03
 ==================
 
   * Add "dropCollections" (options)
 
-1.3.0 / 2014-09-02
+v1.3.0 / 2014-09-02
 ==================
 
-  * Tested with `iojs`@3
+  * Tested against `iojs`@3
   * Update `logger-request`@3.4.0
   * Update `mongodb`@2.0.42
   * Update `bson`@0.4.11
   * Update `tar`@2.2.0
 
-1.2.2 / 2014-07-18
+v1.2.2 / 2014-07-18
 ==================
 
   * Update `logger-request`@3.3.5
   * Update `mongodb`@2.0.39
   * Update `bson`@0.4.8
 
-1.2.1 / 2014-06-21
+v1.2.1 / 2014-06-21
 ==================
 
   * SPDX license
   * Update `logger-request`@3.3.4
   * Update `mongodb`@2.0.34
 
-1.2.0 / 2014-05-14
+v1.2.0 / 2014-05-14
 ==================
 
-  * Tested with `iojs`@2
+  * Tested against `iojs`@2
   * Update `tar`@2.1.1
   * Update `logger-request`@3.3.3
   * Update `bson`@0.3.2
   * Update `mongodb`@2.0.31
 
-1.1.1 / 2014-04-13
+v1.1.1 / 2014-04-13
 ==================
 
   * Update `tar`@2.0.1
@@ -56,7 +64,7 @@
   * Update `bson`@0.3.1
   * Update `mongodb`@2.0.27
 
-1.1.0 / 2014-03-02
+v1.1.0 / 2014-03-02
 ==================
 
   * Add "stream" (options)
@@ -66,7 +74,7 @@
   * Update `bson`@0.2.19
   * Update `mongodb`@2.0.18
 
-1.0.2 / 2014-02-09
+v1.0.2 / 2014-02-09
 ==================
 
   * `windows` test
@@ -75,35 +83,35 @@
   * Update `bson`@0.2.18
   * Update `mongodb`@2.0.15
 
-1.0.1 / 2014-01-03
+v1.0.1 / 2014-01-03
 ==================
 
   * Remove json formatter from logger
   * Update `logger-request`@3.2.7
 
-1.0.0 / 2014-12-27
+v1.0.0 / 2014-12-27
 ==================
 
   * Use mongodb logger
   * Use `mongodb` 2
   * Add "options" (options)
 
-0.1.0 / 2014-12-27
+v0.1.0 / 2014-12-27
 ==================
 
   * Add custom parser
 
-0.0.2 / 2014-12-27
+v0.0.2 / 2014-12-27
 ==================
 
   * Update documentation
 
-0.0.1 / 2014-12-26
+v0.0.1 / 2014-12-26
 ==================
 
   * Project ready
 
-0.0.0 / 2014-12-26
+v0.0.0 / 2014-12-26
 ==================
 
   * Project start
