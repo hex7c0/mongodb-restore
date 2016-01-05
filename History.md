@@ -1,10 +1,16 @@
-v1.5.0 / 2014-12-29
+v1.5.1 / 2016-01-05
+==================
+
+  * Tested against `node`@5.3
+  * Update `mongodb`@2.1.3
+
+v1.5.0 / 2015-12-29
 ==================
 
   * Versions 1.4.x will be release under `stable` tag
   * Update `mongodb`@2.1.2
 
-v1.4.3 / 2014-12-27
+v1.4.3 / 2015-12-27
 ==================
 
   * Tested against `node`@5
@@ -12,25 +18,25 @@ v1.4.3 / 2014-12-27
   * Update `mongodb`@2.0.53
   * Update `bson`@0.4.20
 
-v1.4.2 / 2014-10-07
+v1.4.2 / 2015-10-07
 ==================
 
   * Update `mongodb`@2.0.45
   * Update `bson`@0.4.16
 
-v1.4.1 / 2014-09-17
+v1.4.1 / 2015-09-17
 ==================
 
   * Tested against `node`@4
   * Update `mongodb`@2.0.43
   * Update `tar`@2.2.1
 
-v1.4.0 / 2014-09-03
+v1.4.0 / 2015-09-03
 ==================
 
   * Add "dropCollections" (options)
 
-v1.3.0 / 2014-09-02
+v1.3.0 / 2015-09-02
 ==================
 
   * Tested against `iojs`@3
@@ -39,21 +45,21 @@ v1.3.0 / 2014-09-02
   * Update `bson`@0.4.11
   * Update `tar`@2.2.0
 
-v1.2.2 / 2014-07-18
+v1.2.2 / 2015-07-18
 ==================
 
   * Update `logger-request`@3.3.5
   * Update `mongodb`@2.0.39
   * Update `bson`@0.4.8
 
-v1.2.1 / 2014-06-21
+v1.2.1 / 2015-06-21
 ==================
 
   * SPDX license
   * Update `logger-request`@3.3.4
   * Update `mongodb`@2.0.34
 
-v1.2.0 / 2014-05-14
+v1.2.0 / 2015-05-14
 ==================
 
   * Tested against `iojs`@2
@@ -62,7 +68,7 @@ v1.2.0 / 2014-05-14
   * Update `bson`@0.3.2
   * Update `mongodb`@2.0.31
 
-v1.1.1 / 2014-04-13
+v1.1.1 / 2015-04-13
 ==================
 
   * Update `tar`@2.0.1
@@ -70,7 +76,7 @@ v1.1.1 / 2014-04-13
   * Update `bson`@0.3.1
   * Update `mongodb`@2.0.27
 
-v1.1.0 / 2014-03-02
+v1.1.0 / 2015-03-02
 ==================
 
   * Add "stream" (options)
@@ -80,7 +86,7 @@ v1.1.0 / 2014-03-02
   * Update `bson`@0.2.19
   * Update `mongodb`@2.0.18
 
-v1.0.2 / 2014-02-09
+v1.0.2 / 2015-02-09
 ==================
 
   * `windows` test
@@ -89,7 +95,7 @@ v1.0.2 / 2014-02-09
   * Update `bson`@0.2.18
   * Update `mongodb`@2.0.15
 
-v1.0.1 / 2014-01-03
+v1.0.1 / 2015-01-03
 ==================
 
   * Remove json formatter from logger
