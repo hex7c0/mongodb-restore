@@ -45,7 +45,7 @@ function readMetadata(collection, metadata, next) {
   var t = metadata + collection.collectionName;
   if (fs.existsSync(t) === false) {
     error(new Error('missing metadata for ' + collection.collectionName));
-    return next();
+    return next(null);
   }
   try {
     doc = JSON.parse(fs.readFileSync(t, {
@@ -53,16 +53,16 @@ function readMetadata(collection, metadata, next) {
     }));
   } catch (err) {
     error(err);
-    return next();
+    return next(null);
   }
   if (doc.length === 0) {
-    return next();
+    return next(null);
   }
   for (var i = 0, c = 0, ii = doc.length; i < ii; ++i) {
     var indexes = doc[i];
     if (/^_id/.test(indexes.name) === true) {
       if (++c === ii) {
-        next();
+        next(null);
       }
       continue;
     }
@@ -73,7 +73,7 @@ function readMetadata(collection, metadata, next) {
         error(err);
       }
       if (++c === ii) {
-        next();
+        next(null);
       }
       return;
     });
@@ -176,7 +176,7 @@ function fromJson(collection, collectionPath, next) {
   var docs = fs.readdirSync(collectionPath);
   var last = docs.length, index = 0;
   if (last < 1) {
-    return next();
+    return next(null);
   }
 
   return docs.forEach(function(docName) {
@@ -200,7 +200,7 @@ function fromJson(collection, collectionPath, next) {
       if (err) {
         return last === ++index ? next(err) : error(err);
       }
-      return last === ++index ? next() : null;
+      return last === ++index ? next(null) : null;
     });
   });
 }
@@ -218,7 +218,7 @@ function fromBson(collection, collectionPath, next) {
   var docs = fs.readdirSync(collectionPath);
   var last = docs.length, index = 0;
   if (last < 1) {
-    return next();
+    return next(null);
   }
 
   return docs.forEach(function(docName) {
@@ -242,7 +242,7 @@ function fromBson(collection, collectionPath, next) {
       if (err) {
         return last === ++index ? next(err) : error(err);
       }
-      return last === ++index ? next() : null;
+      return last === ++index ? next(null) : null;
     });
   });
 }
@@ -484,7 +484,7 @@ function wrapper(my) {
           });
         }
 
-        return next();
+        return next(null);
       });
   }
 
