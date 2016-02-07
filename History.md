@@ -1,3 +1,10 @@
+v1.5.2 / 2016-02-07
+==================
+
+  * Using "bulkWrite" (insertOne) operations
+  * Update `mongodb`@2.1.6
+  * Update `bson`@0.4.21
+
 v1.5.1 / 2016-01-05
 ==================
 
