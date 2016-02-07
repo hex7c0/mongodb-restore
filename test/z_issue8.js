@@ -26,7 +26,7 @@ var BLong = bson.BSONPure.Long;
 var URI = process.env.URI;
 var URI2 = process.env.URI2;
 var Root = __dirname + '/dump';
-var Collection = 'test_10';
+var Collection = 'test_8';
 
 /*
  * test module
@@ -199,40 +199,44 @@ describe('issue8', function() {
           db.collection(Collection, function(err, collection) {
 
             assert.ifError(err);
-            collection.findOne({
+            collection.find({
               _id: 'nint64'
-            }, function(err, doc) {
+            }).limit(1).next(function(err, doc) {
 
               assert.ifError(err);
+              assert.ok(doc);
               assert.deepEqual(doc.d, NInt64);
               assert.strictEqual(doc.t, 'foo1');
               fs.unlinkSync(nint64_file);
 
-              collection.findOne({
+              collection.find({
                 _id: 'sint64'
-              }, function(err, doc) {
+              }).limit(1).next(function(err, doc) {
 
                 assert.ifError(err);
+                assert.ok(doc);
                 assert.deepEqual(doc.d, SInt64);
                 assert.strictEqual(doc.t, 'foo2');
                 fs.unlinkSync(sint64_file);
               });
 
-              collection.findOne({
+              collection.find({
                 _id: 'nlong'
-              }, function(err, doc) {
+              }).limit(1).next(function(err, doc) {
 
                 assert.ifError(err);
+                assert.ok(doc);
                 assert.deepEqual(doc.d, NLong);
                 assert.strictEqual(doc.t, 'foo3');
                 fs.unlinkSync(nlong_file);
               });
 
-              collection.findOne({
+              collection.find({
                 _id: 'slong'
-              }, function(err, doc) {
+              }).limit(1).next(function(err, doc) {
 
                 assert.ifError(err);
+                assert.ok(doc);
                 assert.deepEqual(doc.d, SLong);
                 assert.strictEqual(doc.t, 'foo4');
                 fs.unlinkSync(slong_file);
