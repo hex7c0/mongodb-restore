@@ -173,6 +173,7 @@ function rmDir(path, next) {
  */
 function fromJson(collection, collectionPath, next) {
 
+  var docsBulk = [];
   var docs = fs.readdirSync(collectionPath);
   var last = docs.length, index = 0;
   if (last < 1) {
@@ -195,13 +196,12 @@ function fromJson(collection, collectionPath, next) {
       return last === ++index ? next(err) : error(err);
     }
 
-    return collection.save(doc, function(err) {
-
-      if (err) {
-        return last === ++index ? next(err) : error(err);
+    docsBulk.push({
+      insertOne: {
+        document: doc
       }
-      return last === ++index ? next() : null;
     });
+    return last === ++index ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -215,6 +215,7 @@ function fromJson(collection, collectionPath, next) {
  */
 function fromBson(collection, collectionPath, next) {
 
+  var docsBulk = [];
   var docs = fs.readdirSync(collectionPath);
   var last = docs.length, index = 0;
   if (last < 1) {
@@ -237,13 +238,12 @@ function fromBson(collection, collectionPath, next) {
       return last === ++index ? next(err) : error(err);
     }
 
-    return collection.save(doc, function(err) {
-
-      if (err) {
-        return last === ++index ? next(err) : error(err);
+    docsBulk.push({
+      insertOne: {
+        document: doc
       }
-      return last === ++index ? next() : null;
     });
+    return last === ++index ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
