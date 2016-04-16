@@ -26,7 +26,7 @@
   "dependencies": {
     "bson": "0.4.21",
     "mongodb": "2.1.6",
-    "logger-request": "3.6.0",
+    "logger-request": "3.6.1",
     "tar": "2.2.1"
   },
   "devDependencies": {
