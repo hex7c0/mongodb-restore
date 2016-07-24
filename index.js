@@ -12,7 +12,7 @@
 /*
  * initialize module
  */
-var fs = require('fs');
+var fs = require('graceful-fs');
 var BSON;
 var logger;
 var meta;
