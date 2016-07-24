@@ -25,8 +25,9 @@
   "main": "index.min.js",
   "dependencies": {
     "bson": "0.4.21",
-    "mongodb": "2.0.55",
+    "graceful-fs": "4.1.4",
     "logger-request": "3.6.0",
+    "mongodb": "2.0.55",
     "tar": "2.2.1"
   },
   "devDependencies": {
