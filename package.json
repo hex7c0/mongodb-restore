@@ -38,7 +38,7 @@
     "grunt-endline": "~0.5",
     "istanbul": "~0.4",
     "mocha": "~2.5",
-    "mongodb-backup": "~1.5"
+    "mongodb-backup": "~1.6"
   },
   "engines": {
     "node": ">=0.10"
