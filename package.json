@@ -32,12 +32,12 @@
   },
   "devDependencies": {
     "coveralls": "~2.11",
-    "grunt-contrib-clean": "~0.7",
-    "grunt-contrib-uglify": "~0.11",
-    "grunt-contrib-jshint": "~0.12",
-    "grunt-endline": "~0.4",
+    "grunt-contrib-clean": "~1.0",
+    "grunt-contrib-uglify": "~2.0",
+    "grunt-contrib-jshint": "~1.0",
+    "grunt-endline": "~0.5",
     "istanbul": "~0.4",
-    "mocha": "~2.4",
+    "mocha": "~2.5",
     "mongodb-backup": "~1.4"
   },
   "engines": {
