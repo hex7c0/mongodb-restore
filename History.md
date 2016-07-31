@@ -1,3 +1,11 @@
+v1.4.6 / 2016-07-31
+==================
+
+  * Tested against `node`@6
+  * Install `graceful-fs`@4.1.5 for #https://github.com/hex7c0/mongodb-backup/issues/16
+  * Update `logger-request`@3.6.1
+  * Update `bson`@0.4.23
+
 v1.4.5 / 2016-02-07
 ==================
 
