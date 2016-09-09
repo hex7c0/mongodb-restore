@@ -11,6 +11,7 @@
 /*
  * initialize module
  */
+var assert = require('assert');
 var fs = require('fs');
 
 /*
@@ -39,9 +40,7 @@ describe('last', function() {
       fs.readdirSync(path).forEach(function(first) { // database
 
         var database = path + first;
-        if (fs.statSync(database).isDirectory() === false) {
-          return;
-        }
+        assert.equal(fs.statSync(database).isDirectory(), true);
         var metadata = '';
         var collections = fs.readdirSync(database);
         if (fs.existsSync(database + '/.metadata') === true) {

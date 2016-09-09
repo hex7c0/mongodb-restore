@@ -79,9 +79,13 @@ describe('tar', function() {
   describe('restore', function() {
 
     var l = 'l2.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should save data to db', function(done) {
@@ -141,10 +145,6 @@ describe('tar', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });

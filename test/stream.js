@@ -79,11 +79,14 @@ describe('stream', function() {
   describe('restore', function() {
 
     var l = 'l3.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     var stream;
-
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should create file system stream', function(done) {
@@ -147,10 +150,6 @@ describe('stream', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });

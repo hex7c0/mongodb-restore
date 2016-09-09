@@ -84,9 +84,13 @@ describe('directory', function() {
   describe('restore', function() {
 
     var l = 'l1.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should save data to db', function(done) {
@@ -142,10 +146,6 @@ describe('directory', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });
@@ -153,9 +153,13 @@ describe('directory', function() {
   describe('restore - drop', function() {
 
     var l = 'ld1.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should save data to db', function(done) {
@@ -211,10 +215,6 @@ describe('directory', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });
@@ -222,9 +222,13 @@ describe('directory', function() {
   describe('restore - dropCollections without Array', function() {
 
     var l = 'ldc1.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should save data to db', function(done) {
@@ -280,10 +284,6 @@ describe('directory', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });
@@ -291,9 +291,13 @@ describe('directory', function() {
   describe('restore - dropCollections with Array', function() {
 
     var l = 'lda1.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should save data to db', function(done) {
@@ -349,10 +353,6 @@ describe('directory', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });
@@ -360,9 +360,13 @@ describe('directory', function() {
   describe('restore - dropCollections wrong Array', function() {
 
     var l = 'ldw1.log';
+    var date = new Date();
+    var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+      + '-' + pad(date.getUTCDate()) + '.' + l;
     it('should check that log file not exist before test', function(done) {
 
       assert.equal(fs.existsSync(l), false);
+      assert.equal(fs.existsSync(dailyF), false);
       done();
     });
     it('should save data to db', function(done) {
@@ -418,10 +422,6 @@ describe('directory', function() {
     });
     it('should remove log', function(done) {
 
-      var date = new Date();
-      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
-        + '-' + pad(date.getUTCDate()) + '.' + l;
-      assert.equal(fs.existsSync(dailyF), true);
       fs.unlink(dailyF, done);
     });
   });

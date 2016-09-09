@@ -41,9 +41,7 @@ describe('start', function() {
             fs.readdirSync(ROOT).forEach(function(first) { // database
 
               var database = ROOT + '/' + first;
-              if (fs.statSync(database).isDirectory() === false) {
-                return;
-              }
+              assert.equal(fs.statSync(database).isDirectory(), true);
               var second = fs.readdirSync(database);
               assert.equal(second.indexOf('auths') >= 0, true);
             });
