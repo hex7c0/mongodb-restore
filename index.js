@@ -369,6 +369,7 @@ function wrapper(my) {
     logger = require('logger-request')({
       filename: my.logger,
       standalone: true,
+      daily: true,
       winston: {
         logger: '_mongo_r' + my.logger,
         level: 'info',
