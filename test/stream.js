@@ -18,6 +18,16 @@ var client = require('mongodb').MongoClient;
 var URI = process.env.URI;
 var URI2 = process.env.URI2;
 
+var pad = function(val, len) {
+
+  var val = String(val);
+  var len = len || 2;
+  while (val.length < len) {
+    val = '0' + val;
+  }
+  return val;
+};
+
 /*
  * test module
  */
@@ -137,8 +147,11 @@ describe('stream', function() {
     });
     it('should remove log', function(done) {
 
-      assert.equal(fs.existsSync(l), true);
-      fs.unlink(l, done);
+      var date = new Date();
+      var dailyF = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+        + '-' + pad(date.getUTCDate()) + '.' + l;
+      assert.equal(fs.existsSync(dailyF), true);
+      fs.unlink(dailyF, done);
     });
   });
 });
