@@ -36,8 +36,9 @@ describe('start', function() {
           root: ROOT,
           collections: [ 'auths' ],
           metadata: true,
-          callback: function() {
+          callback: function(err) {
 
+            assert.ifError(err);
             fs.readdirSync(ROOT).forEach(function(first) { // database
 
               var database = ROOT + '/' + first;
@@ -62,8 +63,9 @@ describe('start', function() {
           uri: URI2,
           root: ROOT,
           tar: 't1.tar',
-          callback: function() {
+          callback: function(err) {
 
+            assert.ifError(err);
             assert.equal(fs.existsSync(path0), true);
             done();
           }
@@ -76,8 +78,9 @@ describe('start', function() {
           root: ROOT,
           collections: [ 'logins' ],
           tar: 't_stream.tar',
-          callback: function() {
+          callback: function(err) {
 
+            assert.ifError(err);
             assert.equal(fs.existsSync(path1), true);
             done();
           }

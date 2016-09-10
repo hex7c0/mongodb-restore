@@ -185,8 +185,9 @@ describe('issue8', function() {
         restore({
           uri: URI,
           root: ROOT,
-          callback: function() {
+          callback: function(err) {
 
+            assert.ifError(err);
             setTimeout(done, 500); // time for mongod
           }
         });

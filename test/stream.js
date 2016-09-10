@@ -100,8 +100,9 @@ describe('stream', function() {
         uri: URI,
         logger: l,
         stream: stream,
-        callback: function() {
+        callback: function(err) {
 
+          assert.ifError(err);
           setTimeout(done, 500); // time for mongod
         }
       });

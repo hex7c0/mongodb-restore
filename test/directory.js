@@ -93,7 +93,7 @@ describe('directory', function() {
       assert.equal(fs.existsSync(dailyF), false);
       done();
     });
-    it('should save data to db', function(done) {
+    it('should save data to db, with Id duplicated', function(done) {
 
       restore({
         uri: URI,
@@ -101,8 +101,10 @@ describe('directory', function() {
         logger: l,
         metadata: true,
         drop: false, // for coverage
-        callback: function() {
+        callback: function(err) {
 
+          assert.notEqual(err, null);
+          assert.ok(/duplicate key error index/.test(err.message));
           setTimeout(done, 500); // time for mongod
         }
       });
@@ -170,8 +172,9 @@ describe('directory', function() {
         logger: l,
         metadata: true,
         drop: true,
-        callback: function() {
+        callback: function(err) {
 
+          assert.ifError(err);
           setTimeout(done, 500); // time for mongod
         }
       });
@@ -239,8 +242,9 @@ describe('directory', function() {
         logger: l,
         metadata: true,
         dropCollections: true,
-        callback: function() {
+        callback: function(err) {
 
+          assert.ifError(err);
           setTimeout(done, 500); // time for mongod
         }
       });
@@ -300,20 +304,40 @@ describe('directory', function() {
       assert.equal(fs.existsSync(dailyF), false);
       done();
     });
-    it('should save data to db', function(done) {
+    it('should save data to db, with collection fail because alredy dropped',
+      function(done) {
 
-      restore({
-        uri: URI,
-        root: ROOT,
-        logger: l,
-        metadata: true,
-        dropCollections: [ 'auth' ],
-        callback: function() {
+        restore({
+          uri: URI,
+          root: ROOT,
+          logger: l,
+          metadata: true,
+          dropCollections: [ 'auth' ],
+          callback: function(err) {
 
-          setTimeout(done, 500); // time for mongod
-        }
+            assert.notEqual(err, null);
+            assert.ok(/ns not found/.test(err.message));
+            setTimeout(done, 500); // time for mongod
+          }
+        });
       });
-    });
+    it('should save data to db, with collections fails because missing',
+      function(done) {
+
+        restore({
+          uri: URI,
+          root: ROOT,
+          logger: l,
+          metadata: true,
+          dropCollections: [ 'foo_bar' ],
+          callback: function(err) {
+
+            assert.notEqual(err, null);
+            assert.ok(/ns not found/.test(err.message));
+            setTimeout(done, 500); // time for mongod
+          }
+        });
+      });
     it('should test original data and saved data', function(done) {
 
       client.connect(URI, function(err, db) {
@@ -377,8 +401,9 @@ describe('directory', function() {
         logger: l,
         metadata: true,
         dropCollections: {},
-        callback: function() {
+        callback: function(err) {
 
+          assert.ifError(err);
           setTimeout(done, 500); // time for mongod
         }
       });

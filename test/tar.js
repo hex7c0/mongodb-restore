@@ -95,8 +95,9 @@ describe('tar', function() {
         root: ROOT,
         logger: l,
         tar: 't1.tar',
-        callback: function() {
+        callback: function(err) {
 
+          assert.ifError(err);
           setTimeout(done, 500); // time for mongod
         }
       });
