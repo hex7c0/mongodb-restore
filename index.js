@@ -12,6 +12,7 @@
 /*
  * initialize module
  */
+var systemRegex = /^system\./;
 var fs = require('graceful-fs');
 var BSON;
 var logger;
@@ -28,7 +29,7 @@ var meta;
  */
 function error(err) {
 
-  return logger(err.message);
+  logger(err.message);
 }
 
 /**
@@ -44,16 +45,12 @@ function readMetadata(collection, metadata, next) {
   var doc;
   var t = metadata + collection.collectionName;
   if (fs.existsSync(t) === false) {
-    error(new Error('missing metadata for ' + collection.collectionName));
-    return next(null);
+    return next(new Error('missing metadata for ' + collection.collectionName));
   }
   try {
-    doc = JSON.parse(fs.readFileSync(t, {
-      encoding: 'utf8'
-    }));
+    doc = JSON.parse(fs.readFileSync(t));
   } catch (err) {
-    error(err);
-    return next(null);
+    return next(err);
   }
   if (doc.length === 0) {
     return next(null);
@@ -70,12 +67,10 @@ function readMetadata(collection, metadata, next) {
     collection.createIndex(name, indexes, function(err) {
 
       if (err) {
-        error(err);
-      }
-      if (++c === ii) {
+        next(err);
+      } else if (++c === ii) {
         next(null);
       }
-      return;
     });
   }
 }
@@ -89,13 +84,13 @@ function readMetadata(collection, metadata, next) {
  */
 function makeDir(path, next) {
 
-  return fs.stat(path, function(err, stats) {
+  fs.stat(path, function(err, stats) {
 
     if (err && err.code === 'ENOENT') {
       logger('make dir at ' + path);
       return fs.mkdir(path, function(err) {
 
-        return next(err, path);
+        next(err, path);
       });
 
     } else if (stats && stats.isDirectory() === false) {
@@ -103,14 +98,14 @@ function makeDir(path, next) {
       return fs.unlink(path, function() {
 
         logger('make dir at ' + path);
-        return fs.mkdir(path, function(err) {
+        fs.mkdir(path, function(err) {
 
-          return next(err, path);
+          next(err, path);
         });
       });
     }
 
-    return next(null, path);
+    next(null, path);
   });
 }
 
@@ -153,13 +148,13 @@ function rmDir(path, next) {
       if (metadata !== '') {
         fs.unlinkSync(metadata + second);
       }
-      return fs.rmdirSync(collection);
+      fs.rmdirSync(collection);
     });
 
     if (metadata !== '') {
       fs.rmdirSync(metadata);
     }
-    return fs.rmdirSync(database);
+    fs.rmdirSync(database);
   });
 }
 
@@ -180,18 +175,15 @@ function fromJson(collection, collectionPath, next) {
     return next(null);
   }
 
-  return docs.forEach(function(docName) {
+  docs.forEach(function(docName) {
 
     var doc;
     var docPath = collectionPath + docName;
-    if (fs.statSync(docPath).isFile() === false) {
-      var err = new Error('document is not a valid format');
-      return last === ++index ? next(err) : error(err);
+    if (fs.statSync(docPath).isFile() === false) { // dir
+      return last === ++index ? next(null) : error(null);
     }
     try {
-      doc = JSON.parse(fs.readFileSync(docPath, {
-        encoding: 'utf8'
-      }));
+      doc = JSON.parse(fs.readFileSync(docPath));
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
@@ -222,18 +214,15 @@ function fromBson(collection, collectionPath, next) {
     return next(null);
   }
 
-  return docs.forEach(function(docName) {
+  docs.forEach(function(docName) {
 
     var doc;
     var docPath = collectionPath + docName;
-    if (fs.statSync(docPath).isFile() === false) {
-      var err = new Error('document is not a valid format');
-      return last === ++index ? next(err) : error(err);
+    if (fs.statSync(docPath).isFile() === false) { // dir
+      return last === ++index ? next(null) : error(null);
     }
     try {
-      doc = BSON.deserialize(fs.readFileSync(docPath, {
-        encoding: null
-      }));
+      doc = BSON.deserialize(fs.readFileSync(docPath));
     } catch (err) {
       return last === ++index ? next(err) : error(err);
     }
@@ -260,8 +249,8 @@ function fromBson(collection, collectionPath, next) {
 function allCollections(db, name, metadata, parser, next) {
 
   var collections = fs.readdirSync(name);
-  var last = collections.length, index = 0;
-  if (last < 1) {
+  var last = ~~collections.length, index = 0;
+  if (last === 0) { // empty set
     return next(null);
   }
 
@@ -270,22 +259,22 @@ function allCollections(db, name, metadata, parser, next) {
     last--;
   }
 
-  return collections.forEach(function(collectionName) {
+  collections.forEach(function(collectionName) {
 
     var collectionPath = name + collectionName;
     if (!fs.statSync(collectionPath).isDirectory()) {
       var err = new Error(collectionPath + ' is not a directory');
       return last === ++index ? next(err) : error(err);
     }
-    return db.createCollection(collectionName, function(err, collection) {
+    db.createCollection(collectionName, function(err, collection) {
 
       if (err) {
         return last === ++index ? next(err) : error(err);
       }
       logger('select collection ' + collectionName);
-      return meta(collection, metadata, function() {
+      meta(collection, metadata, function() {
 
-        return parser(collection, collectionPath + '/', function(err) {
+        parser(collection, collectionPath + '/', function(err) {
 
           if (err) {
             return last === ++index ? next(err) : error(err);
@@ -307,14 +296,14 @@ function allCollections(db, name, metadata, parser, next) {
  */
 function someCollections(db, collections, next) {
 
-  var last = collections.length, index = 0;
-  if (last < 1) {
+  var last = ~~collections.length, index = 0;
+  if (last === 0) { // empty set
     return next(null);
   }
 
-  return collections.forEach(function(collection) {
+  collections.forEach(function(collection) {
 
-    return db.collection(collection, function(err, collection) {
+    db.collection(collection, function(err, collection) {
 
       logger('select collection ' + collection.collectionName);
       if (err) {
@@ -381,7 +370,7 @@ function wrapper(my) {
     log.setLevel('info');
     log.setCurrentLogger(function(msg) {
 
-      return logger(msg);
+      logger(msg);
     });
   }
 
@@ -396,21 +385,24 @@ function wrapper(my) {
   }
 
   /**
-   * end point
+   * latest callback
    * 
    * @return {Null}
    */
-  function callback() {
+  function callback(err) {
 
     logger('restore stop');
     if (my.tar) {
       rmDir(my.dir);
     }
+
     if (my.callback !== null) {
       logger('callback run');
-      my.callback();
+      my.callback(err);
+
+    } else if (err) {
+      logger(err);
     }
-    return;
   }
 
   /**
@@ -423,49 +415,39 @@ function wrapper(my) {
     if (my.metadata === true) {
       metadata = root + '.metadata/';
     }
-    return require('mongodb').MongoClient.connect(my.uri, my.options,
+    require('mongodb').MongoClient.connect(my.uri, my.options,
       function(err, db) {
 
         logger('db open');
         if (err) {
-          return error(err);
+          return callback(err);
         }
 
         function next(err) {
 
           if (err) {
-            error(err);
             logger('db close');
             db.close();
-            return callback();
+            return callback(err);
           }
 
           // waiting for `db.fsyncLock()` on node driver
-          return discriminator(db, root, metadata, parser, function(err) {
+          discriminator(db, root, metadata, parser, function(err) {
 
-            if (err) {
-              error(err);
-            }
             logger('db close');
             db.close();
-
-            return callback();
+            callback(err);
           });
         }
 
         if (my.drop === true) {
           logger('drop database');
-          return db.dropDatabase(function(err) {
+          return db.dropDatabase(next);
 
-            return next(err);
-          });
         } else if (my.dropCollections) {
           logger('drop collections');
           if (Array.isArray(my.dropCollections) === true) {
-            return someCollections(db, my.dropCollections, function(err) {
-
-              return next(err);
-            });
+            return someCollections(db, my.dropCollections, next);
           }
           return db.collections(function(err, collections) {
 
@@ -474,18 +456,16 @@ function wrapper(my) {
             }
             my.dropCollections = [];
             for (var i = 0, ii = collections.length; i < ii; i++) {
-              if (/^system./.test(collections[i].collectionName) === false) {
-                my.dropCollections.push(collections[i].collectionName);
+              var collectionName = collections[i].collectionName;
+              if (systemRegex.test(collectionName) === false) {
+                my.dropCollections.push(collectionName);
               }
             }
-            return someCollections(db, my.dropCollections, function(err) {
-
-              return next(err);
-            });
+            someCollections(db, my.dropCollections, next);
           });
         }
 
-        return next(null);
+        next(null);
       });
   }
 
@@ -493,11 +473,11 @@ function wrapper(my) {
     return go(my.root);
   }
 
-  return makeDir(my.dir, function() {
+  makeDir(my.dir, function() {
 
     var extractor = require('tar').Extract({
       path: my.dir
-    }).on('error', error).on('end', function() {
+    }).on('error', callback).on('end', function() {
 
       var dirs = fs.readdirSync(my.dir);
       for (var i = 0, ii = dirs.length; i < ii; i++) {
@@ -506,17 +486,17 @@ function wrapper(my) {
           return go(t + '/');
         }
       }
-      return;
     });
 
     if (my.stream !== null) { // user stream
       logger('get tar file from stream');
       my.stream.pipe(extractor);
+
     } else { // filesystem stream
       logger('open tar file at ' + my.root + my.tar);
-      fs.createReadStream(my.root + my.tar).on('error', error).pipe(extractor);
+      fs.createReadStream(my.root + my.tar).on('error', callback).pipe(
+        extractor);
     }
-    return;
   });
 }
 
@@ -560,6 +540,6 @@ function restore(options) {
   if (my.stream) {
     my.tar = true; // override
   }
-  return wrapper(my);
+  wrapper(my);
 }
 module.exports = restore;
