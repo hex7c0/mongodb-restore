@@ -60,10 +60,10 @@ describe('directory', function() {
 
       db.collection(COLLECTION, function(err, collection) {
 
-        assert.equal(err, null);
+        assert.ifError(err);
         collection.indexes(function(err, index) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           INDEX = index;
           collection.find({}, {
             sort: {
@@ -115,15 +115,15 @@ describe('directory', function() {
 
         db.listCollections({}).toArray(function(err, items) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           // assert.equal(items.length, 2); // collection + indexes
           assert.equal(items.length >= 2, true); // travis same workspace
           db.collection(COLLECTION, function(err, collection) {
 
-            assert.equal(err, null);
+            assert.ifError(err);
             collection.indexes(function(err, index) {
 
-              assert.equal(err, null);
+              assert.ifError(err);
               assert.equal(index.length, INDEX.length);
               for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
                 delete index[i].ns;
@@ -137,7 +137,7 @@ describe('directory', function() {
                 }
               }).toArray(function(err, docs) {
 
-                assert.equal(err, null);
+                assert.ifError(err);
                 assert.deepEqual(docs, DOCS); // same above
                 done();
               });
@@ -185,15 +185,15 @@ describe('directory', function() {
 
         db.listCollections({}).toArray(function(err, items) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           // assert.equal(items.length, 2); // collection + indexes
           assert.equal(items.length >= 2, true); // travis same workspace
           db.collection(COLLECTION, function(err, collection) {
 
-            assert.equal(err, null);
+            assert.ifError(err);
             collection.indexes(function(err, index) {
 
-              assert.equal(err, null);
+              assert.ifError(err);
               assert.equal(index.length, INDEX.length);
               for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
                 delete index[i].ns;
@@ -207,7 +207,7 @@ describe('directory', function() {
                 }
               }).toArray(function(err, docs) {
 
-                assert.equal(err, null);
+                assert.ifError(err);
                 assert.deepEqual(docs, DOCS); // same above
                 done();
               });
@@ -255,15 +255,15 @@ describe('directory', function() {
 
         db.listCollections({}).toArray(function(err, items) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           // assert.equal(items.length, 2); // collection + indexes
           assert.equal(items.length >= 2, true); // travis same workspace
           db.collection(COLLECTION, function(err, collection) {
 
-            assert.equal(err, null);
+            assert.ifError(err);
             collection.indexes(function(err, index) {
 
-              assert.equal(err, null);
+              assert.ifError(err);
               assert.equal(index.length, INDEX.length);
               for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
                 delete index[i].ns;
@@ -277,7 +277,7 @@ describe('directory', function() {
                 }
               }).toArray(function(err, docs) {
 
-                assert.equal(err, null);
+                assert.ifError(err);
                 assert.deepEqual(docs, DOCS); // same above
                 done();
               });
@@ -344,15 +344,15 @@ describe('directory', function() {
 
         db.listCollections({}).toArray(function(err, items) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           // assert.equal(items.length, 2); // collection + indexes
           assert.equal(items.length >= 2, true); // travis same workspace
           db.collection(COLLECTION, function(err, collection) {
 
-            assert.equal(err, null);
+            assert.ifError(err);
             collection.indexes(function(err, index) {
 
-              assert.equal(err, null);
+              assert.ifError(err);
               assert.equal(index.length, INDEX.length);
               for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
                 delete index[i].ns;
@@ -366,7 +366,7 @@ describe('directory', function() {
                 }
               }).toArray(function(err, docs) {
 
-                assert.equal(err, null);
+                assert.ifError(err);
                 assert.deepEqual(docs, DOCS); // same above
                 done();
               });
@@ -414,15 +414,15 @@ describe('directory', function() {
 
         db.listCollections({}).toArray(function(err, items) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           // assert.equal(items.length, 2); // collection + indexes
           assert.equal(items.length >= 2, true); // travis same workspace
           db.collection(COLLECTION, function(err, collection) {
 
-            assert.equal(err, null);
+            assert.ifError(err);
             collection.indexes(function(err, index) {
 
-              assert.equal(err, null);
+              assert.ifError(err);
               assert.equal(index.length, INDEX.length);
               for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
                 delete index[i].ns;
@@ -436,7 +436,7 @@ describe('directory', function() {
                 }
               }).toArray(function(err, docs) {
 
-                assert.equal(err, null);
+                assert.ifError(err);
                 assert.deepEqual(docs, DOCS); // same above
                 done();
               });

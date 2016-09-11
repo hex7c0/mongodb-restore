@@ -55,10 +55,10 @@ describe('tar', function() {
 
       db.collection(COLLECTION, function(err, collection) {
 
-        assert.equal(err, null);
+        assert.ifError(err);
         collection.indexes(function(err, index) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           INDEX = index;
           collection.find({}, {
             sort: {
@@ -108,13 +108,13 @@ describe('tar', function() {
 
         db.listCollections({}).toArray(function(err, items) {
 
-          assert.equal(err, null);
+          assert.ifError(err);
           db.collection(COLLECTION, function(err, collection) {
 
-            assert.equal(err, null);
+            assert.ifError(err);
             collection.indexes(function(err, index) {
 
-              assert.equal(err, null);
+              assert.ifError(err);
               assert.equal(index.length, INDEX.length);
               for (var i = 0, ii = index.length; i < ii; i++) { // remove db releated data
                 delete index[i].ns;
@@ -128,7 +128,7 @@ describe('tar', function() {
                 }
               }).toArray(function(err, docs) {
 
-                assert.equal(err, null);
+                assert.ifError(err);
                 assert.deepEqual(docs, DOCS); // same above
                 done();
               });
