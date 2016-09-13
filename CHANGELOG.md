@@ -1,3 +1,12 @@
+v1.5.5 / 2016-09-13
+==================
+
+  * Pass `err` argument to callback function
+  * Update `bson`@0.5.4
+  * Update `graceful-fs`@4.1.6
+  * Update `mongodb`@2.2.9
+  * Update `logger-request`@3.7.1
+
 v1.5.4 / 2016-07-31
 ==================
 
