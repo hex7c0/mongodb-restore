@@ -27,7 +27,7 @@
     "bson": "0.5.5",
     "graceful-fs": "4.1.6",
     "logger-request": "3.7.1",
-    "mongodb": "2.2.9",
+    "mongodb": "2.2.10",
     "tar": "2.2.1"
   },
   "devDependencies": {
