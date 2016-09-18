@@ -102,7 +102,11 @@ describe('issue8', function() {
         uri: URI2,
         root: Root,
         collections: [ Collection ],
-        callback: done
+        callback: function(err) {
+
+          assert.ifError(err);
+          setTimeout(done, 500); // time for mongod
+        }
       });
     });
   });
