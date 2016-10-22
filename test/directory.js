@@ -47,8 +47,8 @@ describe('directory', function() {
         return;
       }
       ROOT += first;
-      done();
     });
+    done();
   });
   it('should get original data from db', function(done) {
 
@@ -395,9 +395,11 @@ describe('directory', function() {
     });
     it('should save data to db', function(done) {
 
+      var path = require('path');
+
       restore({
         uri: URI,
-        root: ROOT,
+        root: ROOT + path.sep,
         logger: l,
         metadata: true,
         dropCollections: {},
