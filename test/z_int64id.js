@@ -31,7 +31,7 @@ var Collection = 'test_8';
 /*
  * test module
  */
-describe('Int64Id', function() {
+describe('int64 id', function() {
 
   describe('issue8 - parsed as a TimeStamp', function() {
 

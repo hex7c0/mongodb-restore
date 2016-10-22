@@ -47,8 +47,8 @@ describe('directory', function() {
         return;
       }
       ROOT += first;
+      done();
     });
-    done();
   });
   it('should get original data from db', function(done) {
 

@@ -45,11 +45,13 @@ function error(err) {
  */
 function readMetadata(collection, metadata, next) {
 
+  var idTester = /^_id/;
   var doc;
   var t = metadata + collection.collectionName;
   if (fs.existsSync(t) === false) {
     return next(new Error('missing metadata for ' + collection.collectionName));
   }
+
   try {
     doc = JSON.parse(fs.readFileSync(t));
   } catch (err) {
@@ -58,9 +60,10 @@ function readMetadata(collection, metadata, next) {
   if (doc.length === 0) {
     return next(null);
   }
+
   for (var i = 0, c = 0, ii = doc.length; i < ii; ++i) {
     var indexes = doc[i];
-    if (/^_id/.test(indexes.name) === true) {
+    if (idTester.test(indexes.name) === true) {
       if (++c === ii) {
         next(null);
       }
@@ -336,7 +339,7 @@ function wrapper(my) {
   if (typeof my.parser === 'function') {
     parser = my.parser;
   } else {
-    switch (my.parser) {
+    switch (my.parser.toLowerCase()) {
       case 'bson':
         BSON = require('bson');
         BSON = new BSON.BSONPure.BSON();
