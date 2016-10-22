@@ -174,8 +174,8 @@ function fromJson(collection, collectionPath, next) {
 
   var docsBulk = [];
   var docs = fs.readdirSync(collectionPath);
-  var last = docs.length, index = 0;
-  if (last < 1) {
+  var last = ~~docs.length, index = 0;
+  if (last === 0) {
     return next(null);
   }
 
@@ -184,7 +184,7 @@ function fromJson(collection, collectionPath, next) {
     var doc;
     var docPath = collectionPath + docName;
     if (fs.statSync(docPath).isFile() === false) { // dir
-      return last === ++index ? next(null) : error(null);
+      return last === ++index ? next(null) : null;
     }
     try {
       doc = JSON.parse(fs.readFileSync(docPath));
@@ -213,8 +213,8 @@ function fromBson(collection, collectionPath, next) {
 
   var docsBulk = [];
   var docs = fs.readdirSync(collectionPath);
-  var last = docs.length, index = 0;
-  if (last < 1) {
+  var last = ~~docs.length, index = 0;
+  if (last === 0) {
     return next(null);
   }
 
@@ -223,7 +223,7 @@ function fromBson(collection, collectionPath, next) {
     var doc;
     var docPath = collectionPath + docName;
     if (fs.statSync(docPath).isFile() === false) { // dir
-      return last === ++index ? next(null) : error(null);
+      return last === ++index ? next(null) : null;
     }
     try {
       doc = BSON.deserialize(fs.readFileSync(docPath));

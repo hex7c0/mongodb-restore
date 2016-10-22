@@ -32,7 +32,7 @@ var restore = require('mongodb-restore');
 
 restore({
   uri: 'uri', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-  root: __dirname + '/db'
+  root: __dirname + '/dbName'
 });
 ```
 
