@@ -45,33 +45,33 @@ function error(err) {
  */
 function readMetadata(collection, metadata, next) {
 
-  var doc;
+  var indexes;
   var t = metadata + collection.collectionName;
   if (fs.existsSync(t) === false) {
     return next(new Error('missing metadata for ' + collection.collectionName));
   }
 
   try {
-    doc = JSON.parse(fs.readFileSync(t));
+    indexes = JSON.parse(fs.readFileSync(t));
   } catch (err) {
     return next(err);
   }
-  if (doc.length === 0) {
+
+  var last = ~~indexes.length, counter = 0;
+  if (last === 0) {
     return next(null);
   }
 
-  for (var i = 0, c = 0, ii = doc.length; i < ii; ++i) {
-    var index = doc[i];
+  indexes.forEach(function(index) {
 
     collection.createIndex(index.key, index, function(err) {
 
       if (err) {
-        next(err);
-      } else if (++c === ii) {
-        next(null);
+        return last === ++counter ? next(err) : error(err);
       }
+      last === ++counter ? next(null) : null;
     });
-  }
+  });
 }
 
 /**
@@ -182,6 +182,7 @@ function fromJson(collection, collectionPath, next) {
     if (fs.statSync(docPath).isFile() === false) { // dir
       return last === ++index ? next(null) : null;
     }
+
     try {
       doc = JSON.parse(fs.readFileSync(docPath));
     } catch (err) {
@@ -193,7 +194,8 @@ function fromJson(collection, collectionPath, next) {
         document: doc
       }
     });
-    return last === ++index ? collection.bulkWrite(docsBulk, next) : null;
+
+    last === ++index ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -221,6 +223,7 @@ function fromBson(collection, collectionPath, next) {
     if (fs.statSync(docPath).isFile() === false) { // dir
       return last === ++index ? next(null) : null;
     }
+
     try {
       doc = BSON.deserialize(fs.readFileSync(docPath));
     } catch (err) {
@@ -232,7 +235,8 @@ function fromBson(collection, collectionPath, next) {
         document: doc
       }
     });
-    return last === ++index ? collection.bulkWrite(docsBulk, next) : null;
+
+    last === ++index ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -282,7 +286,7 @@ function allCollections(db, name, metadata, parser, next) {
           if (err) {
             return last === ++index ? next(err) : error(err);
           }
-          return last === ++index ? next(null) : null;
+          last === ++index ? next(null) : null;
         });
       });
     });
@@ -317,7 +321,7 @@ function someCollections(db, collections, next) {
         if (err) {
           error(err); // log if missing
         }
-        return last === ++index ? next(null) : null;
+        last === ++index ? next(null) : null;
       });
     });
   });
