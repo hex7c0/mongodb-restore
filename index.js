@@ -45,24 +45,24 @@ function error(err) {
  */
 function readMetadata(collection, metadata, next) {
 
-  var indexes;
-  var t = metadata + collection.collectionName;
-  if (fs.existsSync(t) === false) {
-    return next(new Error('missing metadata for ' + collection.collectionName));
-  }
-
+  var doc, data;
   try {
-    indexes = JSON.parse(fs.readFileSync(t));
+    data = fs.readFileSync(metadata + collection.collectionName);
+  } catch (err) {
+    return next(null);
+  }
+  try {
+    doc = JSON.parse(data);
   } catch (err) {
     return next(err);
   }
 
-  var last = ~~indexes.length, counter = 0;
+  var last = ~~doc.length, counter = 0;
   if (last === 0) {
     return next(null);
   }
 
-  indexes.forEach(function(index) {
+  doc.forEach(function(index) {
 
     collection.createIndex(index.key, index, function(err) {
 
@@ -170,23 +170,23 @@ function fromJson(collection, collectionPath, next) {
 
   var docsBulk = [];
   var docs = fs.readdirSync(collectionPath);
-  var last = ~~docs.length, index = 0;
+  var last = ~~docs.length, counter = 0;
   if (last === 0) {
     return next(null);
   }
 
   docs.forEach(function(docName) {
 
-    var doc;
-    var docPath = collectionPath + docName;
-    if (fs.statSync(docPath).isFile() === false) { // dir
-      return last === ++index ? next(null) : null;
-    }
-
+    var doc, data;
     try {
-      doc = JSON.parse(fs.readFileSync(docPath));
+      data = fs.readFileSync(collectionPath + docName);
     } catch (err) {
-      return last === ++index ? next(err) : error(err);
+      return last === ++counter ? next(null) : null;
+    }
+    try {
+      doc = JSON.parse(data);
+    } catch (err) {
+      return last === ++counter ? next(err) : error(err);
     }
 
     docsBulk.push({
@@ -195,7 +195,7 @@ function fromJson(collection, collectionPath, next) {
       }
     });
 
-    last === ++index ? collection.bulkWrite(docsBulk, next) : null;
+    last === ++counter ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -211,23 +211,23 @@ function fromBson(collection, collectionPath, next) {
 
   var docsBulk = [];
   var docs = fs.readdirSync(collectionPath);
-  var last = ~~docs.length, index = 0;
+  var last = ~~docs.length, counter = 0;
   if (last === 0) {
     return next(null);
   }
 
   docs.forEach(function(docName) {
 
-    var doc;
-    var docPath = collectionPath + docName;
-    if (fs.statSync(docPath).isFile() === false) { // dir
-      return last === ++index ? next(null) : null;
-    }
-
+    var doc, data;
     try {
-      doc = BSON.deserialize(fs.readFileSync(docPath));
+      data = fs.readFileSync(collectionPath + docName);
     } catch (err) {
-      return last === ++index ? next(err) : error(err);
+      return last === ++counter ? next(null) : null;
+    }
+    try {
+      doc = BSON.deserialize(data);
+    } catch (err) {
+      return last === ++counter ? next(err) : error(err);
     }
 
     docsBulk.push({
@@ -236,7 +236,7 @@ function fromBson(collection, collectionPath, next) {
       }
     });
 
-    last === ++index ? collection.bulkWrite(docsBulk, next) : null;
+    last === ++counter ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -253,7 +253,7 @@ function fromBson(collection, collectionPath, next) {
 function allCollections(db, name, metadata, parser, next) {
 
   var collections = fs.readdirSync(name);
-  var last = ~~collections.length, index = 0;
+  var last = ~~collections.length, counter = 0;
   if (last === 0) { // empty set
     return next(null);
   }
@@ -268,12 +268,12 @@ function allCollections(db, name, metadata, parser, next) {
     var collectionPath = name + collectionName;
     if (!fs.statSync(collectionPath).isDirectory()) {
       var err = new Error(collectionPath + ' is not a directory');
-      return last === ++index ? next(err) : error(err);
+      return last === ++counter ? next(err) : error(err);
     }
     db.createCollection(collectionName, function(err, collection) {
 
       if (err) {
-        return last === ++index ? next(err) : error(err);
+        return last === ++counter ? next(err) : error(err);
       }
       logger('select collection ' + collectionName);
       meta(collection, metadata, function(err) {
@@ -284,9 +284,9 @@ function allCollections(db, name, metadata, parser, next) {
         parser(collection, collectionPath + path.sep, function(err) {
 
           if (err) {
-            return last === ++index ? next(err) : error(err);
+            return last === ++counter ? next(err) : error(err);
           }
-          last === ++index ? next(null) : null;
+          last === ++counter ? next(null) : null;
         });
       });
     });
@@ -303,7 +303,7 @@ function allCollections(db, name, metadata, parser, next) {
  */
 function someCollections(db, collections, next) {
 
-  var last = ~~collections.length, index = 0;
+  var last = ~~collections.length, counter = 0;
   if (last === 0) { // empty set
     return next(null);
   }
@@ -314,14 +314,14 @@ function someCollections(db, collections, next) {
 
       logger('select collection ' + collection.collectionName);
       if (err) {
-        return last === ++index ? next(err) : error(err);
+        return last === ++counter ? next(err) : error(err);
       }
       collection.drop(function(err) {
 
         if (err) {
           error(err); // log if missing
         }
-        last === ++index ? next(null) : null;
+        last === ++counter ? next(null) : null;
       });
     });
   });

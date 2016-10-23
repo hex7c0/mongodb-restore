@@ -179,7 +179,7 @@ describe('indexes', function() {
     });
   });
 
-  describe('restore', function() {
+  describe('restore with metadata', function() {
 
     it('should drop collection before restore', function(done) {
 
@@ -198,7 +198,6 @@ describe('indexes', function() {
       restore({
         uri: URI,
         root: ROOT,
-        logger: 'foo',
         metadata: true,
         dropCollections: [ COLLECTION ],
         callback: function(err) {
@@ -230,6 +229,53 @@ describe('indexes', function() {
             delete (indexes[1].ns); // different dbName
 
             assert.deepEqual(indexes, INDEXES);
+
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('restore without metadata', function() {
+
+    it('should delete metadata file before restore', function(done) {
+
+      fs.unlinkSync(FILES.pop(2));
+      done();
+    });
+    it('should restore this collection', function(done) {
+
+      restore({
+        uri: URI,
+        root: ROOT,
+        metadata: true,
+        dropCollections: [ COLLECTION ],
+        callback: function(err) {
+
+          assert.ifError(err, null);
+          setTimeout(done, 500); // time for mongod
+        }
+      });
+    });
+    it('should have 1 indexes (default)', function(done) {
+
+      client.connect(URI, function(err, db) {
+
+        assert.ifError(err);
+        db.collection(COLLECTION, function(err, collection) {
+
+          assert.ifError(err);
+          collection.indexes(function(err, indexes) {
+
+            assert.ifError(err);
+            assert.equal(indexes.length, 1);
+            assert.equal(indexes[0].name, '_id_');
+            assert.equal(indexes[0].key['_id'], '1');
+            assert.deepEqual(Object.keys(indexes[0].key), [ '_id' ]);
+            delete (indexes[0].ns); // different dbName
+
+            assert.notDeepEqual(indexes, INDEXES);
 
             done();
           });
