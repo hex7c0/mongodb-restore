@@ -45,7 +45,6 @@ function error(err) {
  */
 function readMetadata(collection, metadata, next) {
 
-  var idTester = /^_id/;
   var doc;
   var t = metadata + collection.collectionName;
   if (fs.existsSync(t) === false) {
@@ -62,15 +61,9 @@ function readMetadata(collection, metadata, next) {
   }
 
   for (var i = 0, c = 0, ii = doc.length; i < ii; ++i) {
-    var indexes = doc[i];
-    if (idTester.test(indexes.name) === true) {
-      if (++c === ii) {
-        next(null);
-      }
-      continue;
-    }
-    var name = indexes.name.substr(0, indexes.name.length - 2);
-    collection.createIndex(name, indexes, function(err) {
+    var index = doc[i];
+
+    collection.createIndex(index.key, index, function(err) {
 
       if (err) {
         next(err);
@@ -279,8 +272,11 @@ function allCollections(db, name, metadata, parser, next) {
         return last === ++index ? next(err) : error(err);
       }
       logger('select collection ' + collectionName);
-      meta(collection, metadata, function() {
+      meta(collection, metadata, function(err) {
 
+        if (err) {
+          error(err);
+        }
         parser(collection, collectionPath + path.sep, function(err) {
 
           if (err) {
@@ -319,7 +315,7 @@ function someCollections(db, collections, next) {
       collection.drop(function(err) {
 
         if (err) {
-          return last === ++index ? next(err) : error(err);
+          error(err); // log if missing
         }
         return last === ++index ? next(null) : null;
       });
@@ -458,7 +454,7 @@ function wrapper(my) {
           }
           return db.collections(function(err, collections) {
 
-            if (err) {
+            if (err) { // log if missing
               error(err);
             }
             my.dropCollections = [];
