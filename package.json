@@ -41,7 +41,7 @@
     "mongodb-backup": "~1.6"
   },
   "engines": {
-    "node": ">=0.10"
+    "node": ">=1"
   },
   "scripts": {
     "prepublish": "npm prune",
