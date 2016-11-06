@@ -3,7 +3,7 @@
  * @file mongodb-restore main
  * @module mongodb-restore
  * @subpackage main
- * @version 1.3.0
+ * @version 1.6.0
  * @author hex7c0 <hex7c0@gmail.com>
  * @copyright hex7c0 2014
  * @license GPLv3
@@ -69,7 +69,7 @@ function readMetadata(collection, metadata, next) {
       if (err) {
         return last === ++counter ? next(err) : error(err);
       }
-      last === ++counter ? next(null) : null;
+      return last === ++counter ? next(null) : null;
     });
   });
 }
@@ -195,7 +195,7 @@ function fromJson(collection, collectionPath, next) {
       }
     });
 
-    last === ++counter ? collection.bulkWrite(docsBulk, next) : null;
+    return last === ++counter ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -236,7 +236,7 @@ function fromBson(collection, collectionPath, next) {
       }
     });
 
-    last === ++counter ? collection.bulkWrite(docsBulk, next) : null;
+    return last === ++counter ? collection.bulkWrite(docsBulk, next) : null;
   });
 }
 
@@ -286,7 +286,7 @@ function allCollections(db, name, metadata, parser, next) {
           if (err) {
             return last === ++counter ? next(err) : error(err);
           }
-          last === ++counter ? next(null) : null;
+          return last === ++counter ? next(null) : null;
         });
       });
     });
@@ -321,7 +321,7 @@ function someCollections(db, collections, next) {
         if (err) {
           error(err); // log if missing
         }
-        last === ++counter ? next(null) : null;
+        return last === ++counter ? next(null) : null;
       });
     });
   });
