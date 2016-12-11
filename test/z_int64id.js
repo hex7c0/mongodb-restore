@@ -20,9 +20,9 @@ var mongodb = require('mongodb');
 var bson = require('bson');
 
 var client = mongodb.MongoClient;
-var BSON = new BSON();
+var BSON = new bson.BSON();
 var MLong = mongodb.Long;
-var BLong = bson.BSONPure.Long;
+var BLong = bson.Long;
 var URI = process.env.URI;
 var URI2 = process.env.URI2;
 var Root = __dirname + '/dump';
