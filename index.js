@@ -342,7 +342,7 @@ function wrapper(my) {
     switch (my.parser.toLowerCase()) {
       case 'bson':
         BSON = require('bson');
-        BSON = new BSON.BSONPure.BSON();
+        BSON = new BSON();
         parser = fromBson;
         break;
       case 'json':
